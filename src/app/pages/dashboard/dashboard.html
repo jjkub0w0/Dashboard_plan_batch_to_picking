@@ -1,0 +1,869 @@
+<div class="dashboard-container">
+  <!-- Title & Date Context Banner -->
+  <div class="banner-box">
+    <div class="banner-text">
+      <div class="sub-badge">
+        <span class="pulse-dot"></span>
+        ระบบตรวจสอบการจัดสินค้า (Report Picking Verification)
+      </div>
+      <h1 class="main-title">ภาพรวมการจัดสินค้าและการหยิบสินค้าจริง (Batch Plan and Vrfy. Batch)</h1>
+      <p class="date-display">
+         แสดงข้อมูลประจำ: <strong>{{ dateService.fullDateLabel() }}</strong>
+        @if (dateService.isToday()) {
+          <span class="badge-today">วันนี้</span>
+        }
+        <span class="iso-tag" title="วันที่: YYYY-MM-DD">{{ dateService.isoDate() }}</span>
+        @if (dateService.isSyncing() || isLoading()) {
+          <span class="sync-badge loading">กำลังเชื่อมต่อข้อมูล...</span>
+        } @else if (isFromCache()) {
+          <span class="sync-badge cache" title="ใช้งานข้อมูลจากไฟล์ .json ที่บันทึกไว้แล้ว">ข้อมูลจากไฟล์บันทึก</span>
+        } @else if (syncStatus()) {
+          <span class="sync-badge success" title="ดึงข้อมูลใหม่จาก 3 ระบบเรียบร้อย">
+            MS SQL: {{ syncStatus()?.mssql?.totalRows || 0 }} แถว | S3: {{ syncStatus()?.s3?.totalItems || 0 }} | SAP: {{ syncStatus()?.sap?.totalItems || 0 }}
+          </span>
+        }
+      </p>
+    </div>
+
+    <div class="banner-quick-stats">
+      <div class="quick-pill">
+        <span class="q-label">Tripทั้งหมด:</span>
+        <span class="q-val">{{ currentData().totalBatches }} Trip</span>
+      </div>
+      <div class="banner-actions">
+        <button 
+          type="button" 
+          class="btn-export-excel" 
+          [disabled]="isLoading() || isExporting() || dateService.isSyncing()" 
+          (click)="exportExcel()"
+          aria-label="export Excel"
+          title="ดาวน์โหลดรายงานแดชบอร์ดในรูปแบบ Excel (.xlsx)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" x2="12" y1="15" y2="3"/>
+          </svg>
+          <span class="btn-label">
+          @if (isExporting()) {
+            กำลังexport...
+          } @else {
+            export Excel
+          }
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 Primary Core KPI Cards (SO, DO, QTY, SKU, TOTAL BATCHES) -->
+  <div class="core-kpi-grid" [class.is-loading-data]="isLoading()">
+    <!-- 1. Total SO -->
+    <div class="core-card">
+      <div class="core-top">
+        <span class="core-lbl">ยอดรวม SO</span>
+      </div>
+      <div class="core-val">{{ currentData().totalSO }} <span class="core-unit">คำสั่งซื้อ</span></div>
+      <div class="core-desc">Sales Orders</div>
+    </div>
+
+    <!-- 2. Total DO -->
+    <div class="core-card">
+      <div class="core-top">
+        <span class="core-lbl">ยอดรวม DO</span>
+      </div>
+      <div class="core-val">{{ currentData().totalDO }} <span class="core-unit">ใบ</span></div>
+      <div class="core-desc">Delivery Orders</div>
+    </div>
+
+    <!-- 3. Total QTY -->
+    <div class="core-card">
+      <div class="core-top">
+        <span class="core-lbl">ยอดรวม QTY</span>
+      </div>
+      <div class="core-val">
+        {{ currentData().totalQty.toLocaleString()}} <span class="core-unit">หน่วย</span>
+        
+      </div>
+       <div class="core-desc">ยอดรวมสินค้าที่จัดส่งต่อวัน</div>
+    </div>
+
+    <!-- 4. Total SKU -->
+    <div class="core-card">
+      <div class="core-top">
+        <span class="core-lbl">ยอดรวม SKU</span>
+      </div>
+      <div class="core-val">{{ currentData().totalSKU }} <span class="core-unit">รายการ</span></div>
+      <div class="core-desc">ประเภทของสินค้า</div>
+    </div>
+
+    <!-- 5. Total Batches -->
+    <div class="core-card">
+      <div class="core-top">
+        <span class="core-lbl">Trip รวมทั้งหมด</span>
+      </div>
+      <div class="core-val">{{ currentData().totalBatches }}  <span class="core-unit">trip</span></div>
+      <div class="core-desc">ยอดรวม trip ในวันนั้นทั้งหมด</div>
+    </div>
+  </div>
+
+  <!-- Batch Comparison Section (3 Cards: ตรงตามแนะนำ, ตรงตามแนะนำแต่จำนวนไม่ตรง, เปลี่ยนล็อต) -->
+  <div class="comparison-section" [class.is-loading-data]="isLoading()">
+    <!-- 1. Matched Card -->
+    <div class="comp-box comp-matched">
+      <div class="comp-header">
+        <div class="comp-title-group">
+          <div class="comp-badge badge-match">จัดตรงตามที่ระบบแนะนำ</div>
+          <h3 class="comp-heading">ยอดรวมที่จัดสินค้าตรงตามแนะนำ</h3>
+        </div>
+        <div class="comp-rate-circle text-emerald" title="สัดส่วน QTY">
+          {{ matchedQtyPct() }}%
+        </div>
+      </div>
+
+      <div class="comp-stats-row">
+        <div class="comp-stat-item">
+          <span class="c-lbl">จำนวนแถวรายการ</span>
+          <span class="c-val text-emerald">{{ currentData().matchedLines }} <small>/ {{ currentData().totalLines }} แถว</small></span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">ปริมาณสินค้า</span>
+          <span class="c-val text-emerald">
+            {{ currentData().matchedQty.toLocaleString() }}
+          </span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">สัดส่วนต่อยอดคลัง</span>
+          <span class="c-val text-emerald">{{ matchedQtyPct() }}%</span>
+        </div>
+      </div>
+
+      <div class="comp-footer">
+        <span>สินค้าถูกจ่ายตรงตามล็อตและจำนวนที่กำหนดในใบหยิบ</span>
+      </div>
+    </div>
+
+    <!-- 2. QTY Mismatched Card -->
+    <div class="comp-box comp-qty-mismatched">
+      <div class="comp-header">
+        <div class="comp-title-group">
+          <div class="comp-badge badge-qty-mismatch">ตรงตามแนะนำแต่จำนวนไม่ตรง</div>
+          <h3 class="comp-heading">ยอดรวมที่ล็อตตรงแต่ยอดไม่ตรง</h3>
+        </div>
+        <div class="comp-rate-circle text-amber" title="สัดส่วน QTY">
+          {{ qtyMismatchedQtyPct() }}%
+        </div>
+      </div>
+
+      <div class="comp-stats-row">
+        <div class="comp-stat-item">
+          <span class="c-lbl">จำนวนแถวรายการ</span>
+          <span class="c-val text-amber">{{ currentData().qtyMismatchedLines }} <small>/ {{ currentData().totalLines }} แถว</small></span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">ปริมาณสินค้า</span>
+          <span class="c-val text-amber">
+            {{ currentData().qtyMismatchedQty.toLocaleString() }}
+          </span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">สัดส่วนต่อยอดคลัง</span>
+          <span class="c-val text-amber">{{ qtyMismatchedQtyPct() }}%</span>
+        </div>
+      </div>
+
+      <div class="comp-footer">
+        <span>สินค้าหยิบล็อตตรงตามคำแนะนำ แต่จำนวนที่เบิกจ่ายจริงไม่ตรงกับที่แนะนำ</span>
+      </div>
+    </div>
+
+    <!-- 3. Mismatched Card -->
+    <div class="comp-box comp-mismatched">
+      <div class="comp-header">
+        <div class="comp-title-group">
+          <div class="comp-badge badge-mismatch">จัดไม่ตรงตามที่ระบบแนะนำ</div>
+          <h3 class="comp-heading">ยอดรวมที่มีการเปลี่ยนล็อตจริง</h3>
+        </div>
+        <div class="comp-rate-circle text-rose" title="สัดส่วน QTY">
+          {{ mismatchedQtyPct() }}%
+        </div>
+      </div>
+
+      <div class="comp-stats-row">
+        <div class="comp-stat-item">
+          <span class="c-lbl">จำนวนแถวรายการ</span>
+          <span class="c-val text-rose">{{ currentData().mismatchedLines }} <small>/ {{ currentData().totalLines }} แถว</small></span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">ปริมาณสินค้า</span>
+          <span class="c-val text-rose">
+            {{ currentData().mismatchedQty.toLocaleString() }}
+          </span>
+        </div>
+        <div class="comp-stat-item">
+          <span class="c-lbl">สัดส่วนต่อยอดคลัง</span>
+          <span class="c-val text-rose">{{ mismatchedQtyPct() }}%</span>
+        </div>
+      </div>
+
+      <div class="comp-footer">
+        <span>สินค้าที่ไม่ได้หยิบตามล็อตที่กำหนดไว้ในใบหยิบ (เปลี่ยนล็อต)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ratio Progress Bar Barometer / Donut Card -->
+  <div class="progress-barometer-card" [class.is-loading-data]="isLoading()">
+    <div class="barometer-header">
+      <div class="barometer-header-left">
+        <span class="barometer-title">สัดส่วนเปรียบเทียบภาพรวม</span>
+        <span class="barometer-total">
+          รวมทั้งหมด {{ currentData().totalLines }} รายการ ({{ currentData().totalQty.toLocaleString() }} หน่วย)
+        </span>
+      </div>
+
+      <!-- ปุ่มสลับรูปแบบกราฟ (หลอดกราฟ / กราฟวงกลม) -->
+      <div class="chart-toggle-group">
+        <button
+          type="button"
+          class="chart-toggle-btn"
+          [class.active]="chartViewMode() === 'bar'"
+          (click)="setChartViewMode('bar')"
+          title="แสดงแบบหลอดแนวนอน (Bar)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="6" x="3" y="9" rx="3"/>
+          </svg>
+          <span>หลอดกราฟ</span>
+        </button>
+        <button
+          type="button"
+          class="chart-toggle-btn"
+          [class.active]="chartViewMode() === 'donut'"
+          (click)="setChartViewMode('donut')"
+          title="แสดงแบบกราฟวงกลม (Donut)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a10 10 0 0 1 10 10h-10z"/>
+          </svg>
+          <span>กราฟวงกลม</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- สลับแสดงระหว่าง หลอดกราฟเต็มพื้นที่ (100%) หรือ กราฟวงกลม (Donut Chart) -->
+    @if (chartViewMode() === 'bar') {
+      <!-- ข้อความแสดงข้อมูล % แถวยาวแนวนอน (4 คอลัมน์) แสดงเฉพาะเมื่อเปิดแบบหลอดกราฟ -->
+      <div class="barometer-stats-row">
+        <div class="barometer-stat-pill pill-match" title="จัดตรงตามแนะนำ: {{ matchedQtyPct() }}% ({{ currentData().matchedQty.toLocaleString() }} หน่วย)">
+          <div class="stat-left">
+            <span class="stat-dot dot-match"></span>
+            <span class="stat-name">ตรงตามแนะนำ</span>
+          </div>
+          <div class="stat-right">
+            <span class="stat-qty">{{ currentData().matchedQty.toLocaleString() }} หน่วย</span>
+            <span class="stat-pct">{{ matchedQtyPct() }}%</span>
+          </div>
+        </div>
+        <div class="barometer-stat-pill pill-qty-mismatch" title="ตรงตามแนะนำแต่จำนวนไม่ตรง: {{ qtyMismatchedQtyPct() }}% ({{ currentData().qtyMismatchedQty.toLocaleString() }} หน่วย)">
+          <div class="stat-left">
+            <span class="stat-dot dot-qty-mismatch"></span>
+            <span class="stat-name">ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+          </div>
+          <div class="stat-right">
+            <span class="stat-qty">{{ currentData().qtyMismatchedQty.toLocaleString() }} หน่วย</span>
+            <span class="stat-pct">{{ qtyMismatchedQtyPct() }}%</span>
+          </div>
+        </div>
+        <div class="barometer-stat-pill pill-mismatch" title="เปลี่ยนล็อต: {{ mismatchedQtyPct() }}% ({{ currentData().mismatchedQty.toLocaleString() }} หน่วย)">
+          <div class="stat-left">
+            <span class="stat-dot dot-mismatch"></span>
+            <span class="stat-name">เปลี่ยนล็อต</span>
+          </div>
+          <div class="stat-right">
+            <span class="stat-qty">{{ currentData().mismatchedQty.toLocaleString() }} หน่วย</span>
+            <span class="stat-pct">{{ mismatchedQtyPct() }}%</span>
+          </div>
+        </div>
+        <div class="barometer-stat-pill pill-pending" title="ยังไม่ได้จัดส่ง: {{ pendingQtyPct() }}% ({{ currentData().pendingQty.toLocaleString() }} หน่วย)">
+          <div class="stat-left">
+            <span class="stat-dot dot-pending"></span>
+            <span class="stat-name">ยังไม่ได้จัดส่ง</span>
+          </div>
+          <div class="stat-right">
+            <span class="stat-qty">{{ currentData().pendingQty.toLocaleString() }} หน่วย</span>
+            <span class="stat-pct">{{ pendingQtyPct() }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="barometer-body-full">
+        <div class="barometer-track">
+          @if (matchBarSplit().match > 0) {
+            <div class="barometer-fill-match" [style.width.%]="matchBarSplit().match" [title]="'ตรงตามแนะนำ: ' + matchedQtyPct() + '% (' + currentData().matchedQty.toLocaleString() + ' หน่วย)'"></div>
+          }
+          @if (matchBarSplit().qtyMismatch > 0) {
+            <div class="barometer-fill-qty-mismatch" [style.width.%]="matchBarSplit().qtyMismatch" [title]="'ตรงตามแนะนำแต่จำนวนไม่ตรง: ' + qtyMismatchedQtyPct() + '% (' + currentData().qtyMismatchedQty.toLocaleString() + ' หน่วย)'"></div>
+          }
+          @if (matchBarSplit().mismatch > 0) {
+            <div class="barometer-fill-mismatch" [style.width.%]="matchBarSplit().mismatch" [title]="'เปลี่ยนล็อต: ' + mismatchedQtyPct() + '% (' + currentData().mismatchedQty.toLocaleString() + ' หน่วย)'"></div>
+          }
+          @if (matchBarSplit().pending > 0) {
+            <div class="barometer-fill-pending" [style.width.%]="matchBarSplit().pending" [title]="'ยังไม่ได้จัดส่ง: ' + pendingQtyPct() + '% (' + currentData().pendingQty.toLocaleString() + ' หน่วย)'"></div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="donut-chart-layout">
+        <!-- ฝั่งซ้าย: วงกลม Donut Chart จัดกึ่งกลางพื้นที่กล่องซ้าย -->
+        <div class="donut-chart-column">
+          <div class="donut-svg-wrapper">
+            <svg viewBox="0 0 200 200" class="donut-svg" preserveAspectRatio="xMidYMid meet">
+              <g transform="rotate(-90 100 100)">
+                <!-- วงแหวนพื้นฐาน -->
+                <circle
+                  cx="100" cy="100" r="70"
+                  fill="none"
+                  stroke="#f1f5f9"
+                  stroke-width="26"
+                />
+                <!-- ชิ้นส่วนตรงตามแนะนำ -->
+                @if (donutChartData().match.len > 0) {
+                  <circle
+                    cx="100" cy="100" r="70"
+                    fill="none"
+                    stroke="#10b981"
+                    stroke-width="26"
+                    [attr.stroke-dasharray]="donutChartData().match.dashArray"
+                    [attr.stroke-dashoffset]="donutChartData().match.offset"
+                    class="donut-segment"
+                  />
+                }
+                <!-- ชิ้นส่วนตรงตามแนะนำแต่จำนวนไม่ตรง -->
+                @if (donutChartData().qtyMismatch.len > 0) {
+                  <circle
+                    cx="100" cy="100" r="70"
+                    fill="none"
+                    stroke="#f59e0b"
+                    stroke-width="26"
+                    [attr.stroke-dasharray]="donutChartData().qtyMismatch.dashArray"
+                    [attr.stroke-dashoffset]="donutChartData().qtyMismatch.offset"
+                    class="donut-segment"
+                  />
+                }
+                <!-- ชิ้นส่วนเปลี่ยนล็อต -->
+                @if (donutChartData().mismatch.len > 0) {
+                  <circle
+                    cx="100" cy="100" r="70"
+                    fill="none"
+                    stroke="#f43f5e"
+                    stroke-width="26"
+                    [attr.stroke-dasharray]="donutChartData().mismatch.dashArray"
+                    [attr.stroke-dashoffset]="donutChartData().mismatch.offset"
+                    class="donut-segment"
+                  />
+                }
+                <!-- ชิ้นส่วนยังไม่ได้จัดส่ง -->
+                @if (donutChartData().pending.len > 0) {
+                  <circle
+                    cx="100" cy="100" r="70"
+                    fill="none"
+                    stroke="#94a3b8"
+                    stroke-width="26"
+                    [attr.stroke-dasharray]="donutChartData().pending.dashArray"
+                    [attr.stroke-dashoffset]="donutChartData().pending.offset"
+                    class="donut-segment"
+                  />
+                }
+              </g>
+              <!-- ข้อความตรงกลางวงกลม -->
+              <text x="100" y="92" text-anchor="middle" class="donut-center-pct">{{ matchedQtyPct() }}%</text>
+              <text x="100" y="112" text-anchor="middle" class="donut-center-lbl">ตรงตามแนะนำ</text>
+              <text x="100" y="128" text-anchor="middle" class="donut-center-sub">{{ currentData().matchedQty.toLocaleString() }} หน่วย</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ฝั่งขวา: รายละเอียด 4 สถานะ ขยายขนาดใหญ่ขึ้นและจัดรูปแบบ 2x2 สวยงามเต็มพื้นที่ -->
+        <div class="donut-details-column">
+          <div class="donut-detail-card card-match">
+            <div class="detail-top">
+              <div class="detail-top-left">
+                <span class="detail-dot dot-match"></span>
+                <span class="detail-label">ตรงตามแนะนำ</span>
+              </div>
+              <span class="detail-pct">{{ matchedQtyPct() }}%</span>
+            </div>
+            <div class="detail-bottom">
+              <span class="detail-qty">{{ currentData().matchedQty.toLocaleString() }} หน่วย</span>
+              <span class="detail-lines">({{ currentData().matchedLines }} แถว)</span>
+            </div>
+          </div>
+
+          <div class="donut-detail-card card-qty-mismatch">
+            <div class="detail-top">
+              <div class="detail-top-left">
+                <span class="detail-dot dot-qty-mismatch"></span>
+                <span class="detail-label">ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+              </div>
+              <span class="detail-pct">{{ qtyMismatchedQtyPct() }}%</span>
+            </div>
+            <div class="detail-bottom">
+              <span class="detail-qty">{{ currentData().qtyMismatchedQty.toLocaleString() }} หน่วย</span>
+              <span class="detail-lines">({{ currentData().qtyMismatchedLines }} แถว)</span>
+            </div>
+          </div>
+
+          <div class="donut-detail-card card-mismatch">
+            <div class="detail-top">
+              <div class="detail-top-left">
+                <span class="detail-dot dot-mismatch"></span>
+                <span class="detail-label">เปลี่ยนล็อต</span>
+              </div>
+              <span class="detail-pct">{{ mismatchedQtyPct() }}%</span>
+            </div>
+            <div class="detail-bottom">
+              <span class="detail-qty">{{ currentData().mismatchedQty.toLocaleString() }} หน่วย</span>
+              <span class="detail-lines">({{ currentData().mismatchedLines }} แถว)</span>
+            </div>
+          </div>
+
+          <div class="donut-detail-card card-pending">
+            <div class="detail-top">
+              <div class="detail-top-left">
+                <span class="detail-dot dot-pending"></span>
+                <span class="detail-label">ยังไม่ได้จัดส่ง</span>
+              </div>
+              <span class="detail-pct">{{ pendingQtyPct() }}%</span>
+            </div>
+            <div class="detail-bottom">
+              <span class="detail-qty">{{ currentData().pendingQty.toLocaleString() }} หน่วย</span>
+              <span class="detail-lines">({{ currentData().pendingLines }} แถว)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Batch Overview Table (Summarized by SO) -->
+  <div class="data-table-card" [class.is-loading-data]="isLoading()">
+    <div class="table-card-head">
+      <div>
+        <h2 class="table-card-title">สรุปข้อมูลคำสั่งซื้อทั้งหมด (Sales Orders)</h2>
+        <span class="table-card-desc">แสดงรายละเอียดการจัดสรรและอัตราการจัดตรงตามแนะนำรายคำสั่งซื้อ (SO) ประจำวัน</span>
+      </div>
+
+      <!-- Tab Filter Buttons -->
+      <div class="filter-pills">
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="selectedTab() === 'ALL'"
+          (click)="selectedTab.set('ALL')">
+          ทั้งหมด ({{ batchesList().length }})
+        </button>
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="selectedTab() === 'SO'"
+          (click)="selectedTab.set('SO')">
+          คำสั่งซื้อ SO 
+        </button>
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="selectedTab() === 'POSTO'"
+          (click)="selectedTab.set('POSTO')">
+          คำสั่งซื้อ POSTO 
+        </button>
+      </div>
+    </div>
+
+    <!-- แถบเลือกคอลัมน์ข้อมูลที่ต้องการดู (แสดงเฉพาะบนจอเล็ก/แท็บเล็ต iPad / มือถือ) -->
+    <div class="mobile-column-filter-bar">
+      <div class="col-filter-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"/>
+          <line x1="4" y1="10" x2="4" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12" y2="3"/>
+          <line x1="20" y1="21" x2="20" y2="16"/>
+          <line x1="20" y1="12" x2="20" y2="3"/>
+          <line x1="1" y1="14" x2="7" y2="14"/>
+          <line x1="9" y1="8" x2="15" y2="8"/>
+          <line x1="17" y1="16" x2="23" y2="16"/>
+        </svg>
+        <span>เลือกข้อมูลที่ต้องการดู:</span>
+      </div>
+
+      <div class="col-filter-pills">
+        <!-- 1. เลขที่ SO (บังคับแสดงตลอด / ล็อค) -->
+        <button type="button" class="col-toggle-pill pill-locked" title="เลขที่ SO แสดงตลอด">
+          <span class="pill-icon">✓</span>
+          <span class="pill-name">เลขที่ SO</span>
+          <span class="pill-lock-badge">บังคับ</span>
+        </button>
+
+        <!-- 2. เลขที่ DO -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().do"
+                (click)="toggleMobileCol('do')">
+          <span class="pill-icon">{{ mobileCols().do ? '✓' : '+' }}</span>
+          <span class="pill-name">เลขที่ DO</span>
+        </button>
+
+        <!-- 3. Trip -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().trip"
+                (click)="toggleMobileCol('trip')">
+          <span class="pill-icon">{{ mobileCols().trip ? '✓' : '+' }}</span>
+          <span class="pill-name">Trip</span>
+        </button>
+
+        <!-- 4. ประเภท -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().type"
+                (click)="toggleMobileCol('type')">
+          <span class="pill-icon">{{ mobileCols().type ? '✓' : '+' }}</span>
+          <span class="pill-name">ประเภท</span>
+        </button>
+
+        <!-- 5. SKU -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().sku"
+                (click)="toggleMobileCol('sku')">
+          <span class="pill-icon">{{ mobileCols().sku ? '✓' : '+' }}</span>
+          <span class="pill-name">SKU</span>
+        </button>
+
+        <!-- 6. จำนวนรวม (Default: แสดง) -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().qty"
+                (click)="toggleMobileCol('qty')">
+          <span class="pill-icon">{{ mobileCols().qty ? '✓' : '+' }}</span>
+          <span class="pill-name">จำนวนรวม</span>
+        </button>
+
+        <!-- 7. ตรงตามแนะนำ -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().match"
+                (click)="toggleMobileCol('match')">
+          <span class="pill-icon">{{ mobileCols().match ? '✓' : '+' }}</span>
+          <span class="pill-name">ตรงตามแนะนำ</span>
+        </button>
+
+        <!-- 8. ยอดไม่ตรง -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().qtyMismatch"
+                (click)="toggleMobileCol('qtyMismatch')">
+          <span class="pill-icon">{{ mobileCols().qtyMismatch ? '✓' : '+' }}</span>
+          <span class="pill-name">ยอดไม่ตรง</span>
+        </button>
+
+        <!-- 9. เปลี่ยนล็อต -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().mismatch"
+                (click)="toggleMobileCol('mismatch')">
+          <span class="pill-icon">{{ mobileCols().mismatch ? '✓' : '+' }}</span>
+          <span class="pill-name">เปลี่ยนล็อต</span>
+        </button>
+
+        <!-- 10. สัดส่วน (Default: แสดง) -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().rate"
+                (click)="toggleMobileCol('rate')">
+          <span class="pill-icon">{{ mobileCols().rate ? '✓' : '+' }}</span>
+          <span class="pill-name">สัดส่วน</span>
+        </button>
+
+        <!-- 11. สถานะ (Default: แสดง) -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().status"
+                (click)="toggleMobileCol('status')">
+          <span class="pill-icon">{{ mobileCols().status ? '✓' : '+' }}</span>
+          <span class="pill-name">สถานะ</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="batch-report-table"
+             [class.col-show-do]="mobileCols().do"
+             [class.col-show-trip]="mobileCols().trip"
+             [class.col-show-type]="mobileCols().type"
+             [class.col-show-sku]="mobileCols().sku"
+             [class.col-show-qty]="mobileCols().qty"
+             [class.col-show-match]="mobileCols().match"
+             [class.col-show-qty-mismatch]="mobileCols().qtyMismatch"
+             [class.col-show-mismatch]="mobileCols().mismatch"
+             [class.col-show-rate]="mobileCols().rate"
+             [class.col-show-status]="mobileCols().status">
+        <thead>
+          <tr>
+            <th class="col-so">เลขที่ SO</th>
+            <th class="col-do">เลขที่ DO</th>
+            <th class="col-trip">Trip</th>
+            <th class="col-type">ประเภท</th>
+            <th class="col-sku text-right">SKU</th>
+            <th class="col-qty text-right">จำนวนรวม</th>
+            <th class="col-match text-right">ตรงตามแนะนำ</th>
+            <th class="col-qty-mismatch text-right">ตรงตามแนะนำแต่จำนวนไม่ตรง</th>
+            <th class="col-mismatch text-right">เปลี่ยนล็อต</th>
+            <th class="col-rate text-center">สัดส่วน (%)</th>
+            <th class="col-status text-center">สถานะ</th>
+            <th class="col-action text-center"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of filteredBatches(); track b.batchCode) {
+            <tr>
+              <td class="col-so">
+                <button
+                  type="button"
+                  class="so-link-btn"
+                  title="คลิกเพื่อดูรายละเอียดเลข Batch ของ SO นี้"
+                  (click)="selectSo(b.soNumber || b.batchCode)">
+                  <span class="code-text font-bold">{{ b.soNumber || b.batchCode }}</span>
+                </button>
+                <span class="mobile-so-meta" [class.hide-mobile-meta]="mobileCols().do && mobileCols().trip">
+                  @if (b.doNumber || b.doCount) {
+                    <span>DO: {{ b.doNumber || b.doCount }}</span>
+                  }
+                  @if (b.route) {
+                    <span> • {{ b.route }}</span>
+                  }
+                </span>
+              </td>
+              <td class="col-do">
+                <span class="code-text font-medium">{{ b.doNumber || b.doCount }}</span>
+              </td>
+              <td class="col-trip">
+                <span class="route-name">{{ b.route }}</span>
+              </td>
+              <td class="col-type">
+                <span class="type-pill" [class.type-posto]="b.orderType === 'POSTO'">
+                  {{ b.orderType }}
+                </span>
+              </td>
+              <td class="col-sku text-right">{{ b.skusCount }}</td>
+              <td class="col-qty text-right font-bold text-dark">
+                {{ (b.totalQty || 0).toLocaleString() }}
+              </td>
+              <td class="col-match text-right text-emerald font-bold">
+                {{ (b.matchedQty || 0).toLocaleString() }}
+              </td>
+              <td class="col-qty-mismatch text-right text-amber font-bold">
+                {{ (b.qtyMismatchedQty || 0).toLocaleString() }}
+              </td>
+              <td class="col-mismatch text-right text-rose font-bold">
+                {{ (b.mismatchedQty || 0).toLocaleString() }}
+              </td>
+              <td class="col-rate text-center">
+                <div class="rate-cell">
+                  <span class="rate-num" [class.rate-high]="b.matchRate >= 50">{{ b.matchRate }}%</span>
+                  <div class="mini-bar-wrap">
+                    <div class="mini-bar-fill" [style.width.%]="b.matchRate" [class.bar-high]="b.matchRate >= 50"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="col-status text-center">
+                @if (b.status === 'COMPLETED') {
+                  <span class="status-tag tag-done">ตรงตามแนะนำ</span>
+                } @else if (b.status === 'IN_PROGRESS') {
+                  <span class="status-tag tag-progress">เปลี่ยนล็อต</span>
+                } @else {
+                  <span class="status-tag tag-plan">รอข้อมูล SAP</span>
+                }
+              </td>
+              <td class="col-action text-center">
+                <button
+                  type="button"
+                  class="btn-so-more"
+                  (click)="openBatchDetail(b)"
+                  title="ดูข้อมูลสรุปทั้งหมดของ SO นี้"
+                  aria-label="ดูข้อมูล SO ทั้งหมด">
+                  ⋮
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="12" class="text-center py-8">
+                <div class="empty-notice">
+                  @if (isLoading()) {
+                    <div class="empty-title">กำลังดึงและประมวลผลข้อมูล...</div>
+                    <div class="empty-sub">กรุณารอสักครู่ ระบบกำลังเชื่อมต่อและประมวลผลข้อมูลประจำวันที่เลือก</div>
+                  } @else {
+                    <div class="empty-title">ไม่มีข้อมูลคำสั่งซื้อสำหรับวันที่เลือก</div>
+                    <div class="empty-sub">ระบบประมวลผลข้อมูลจริงจากระบบ ไม่พบข้อมูลคำสั่งซื้อในวันที่เลือก</div>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr class="summary-footer-row">
+            <td class="col-so text-left font-bold">รวม ({{ filteredBatches().length }})</td>
+            <td class="col-do">-</td>
+            <td class="col-trip">-</td>
+            <td class="col-type">-</td>
+            <td class="col-sku text-right font-bold">{{ footerTotals().totalSKU }}</td>
+            <td class="col-qty text-right font-bold text-dark">
+              {{ footerTotals().totalQty.toLocaleString() }}
+            </td>
+            <td class="col-match text-right font-bold text-emerald">
+              {{ footerTotals().matchedQty.toLocaleString() }}
+            </td>
+            <td class="col-qty-mismatch text-right font-bold text-amber">
+              {{ footerTotals().qtyMismatchedQty.toLocaleString() }}
+            </td>
+            <td class="col-mismatch text-right font-bold text-rose">
+              {{ footerTotals().mismatchedQty.toLocaleString() }}
+            </td>
+            <td class="col-rate text-center font-bold text-emerald">{{ footerTotals().rate }}%</td>
+            <td class="col-status text-center font-bold">-</td>
+            <td class="col-action"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- SO Detail Modal (แสดงเมื่อกดปุ่มจุดไข่ปลา ⋮ บนจอเล็ก) -->
+  @if (selectedBatchDetail(); as active) {
+    <div class="so-modal-backdrop" (click)="closeBatchDetail()">
+      <div class="so-modal-dialog" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="so-modal-header">
+          <div class="modal-title-group">
+            <span class="modal-badge">สรุปข้อมูลคำสั่งซื้อ</span>
+            <h3 class="modal-heading">SO: {{ active.soNumber || active.batchCode }}</h3>
+            <span class="modal-sub">
+              @if (active.doNumber || active.doCount) { DO: {{ active.doNumber || active.doCount }} • }
+              Trip: {{ active.route }}
+            </span>
+          </div>
+          <button type="button" class="btn-modal-close" (click)="closeBatchDetail()" aria-label="ปิดหน้าต่าง">
+            ✕
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="so-modal-body">
+          <!-- Summary Card -->
+          <div class="modal-summary-card">
+            <div class="modal-summary-top">
+              <div class="order-type-chip" [class.type-posto]="active.orderType === 'POSTO'">
+                {{ active.orderType }}
+              </div>
+              <div class="status-wrap">
+                @if (active.status === 'COMPLETED') {
+                  <span class="status-tag tag-done">ตรงตามแนะนำ</span>
+                } @else if (active.status === 'IN_PROGRESS') {
+                  <span class="status-tag tag-progress">เปลี่ยนล็อต</span>
+                } @else {
+                  <span class="status-tag tag-plan">รอข้อมูล SAP</span>
+                }
+              </div>
+            </div>
+
+            <div class="modal-summary-stats">
+              <div class="m-stat-box">
+                <span class="m-lbl">จำนวนรวมทั้งหมด</span>
+                <span class="m-val text-dark font-bold">{{ (active.totalQty || 0).toLocaleString() }} <small>หน่วย</small></span>
+              </div>
+              <div class="m-stat-box">
+                <span class="m-lbl">จำนวน SKU</span>
+                <span class="m-val font-bold">{{ active.skusCount }} <small>รายการ</small></span>
+              </div>
+              <div class="m-stat-box">
+                <span class="m-lbl">อัตราตรงตามแนะนำ</span>
+                <span class="m-val text-emerald font-bold">{{ active.matchRate }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Breakdown Section -->
+          <div class="modal-breakdown-section">
+            <h4 class="section-heading">สัดส่วนการจัดสินค้า (Picking Breakdown)</h4>
+            
+            <div class="breakdown-cards-grid">
+              <!-- 1. ตรงตามแนะนำ -->
+              <div class="breakdown-card card-match">
+                <div class="b-head">
+                  <span class="b-dot dot-match"></span>
+                  <span class="b-title">จัดตรงตามแนะนำ</span>
+                </div>
+                <div class="b-body">
+                  <span class="b-val text-emerald">{{ (active.matchedQty || 0).toLocaleString() }} หน่วย</span>
+                  <span class="b-sub">{{ active.matchedLines }} แถวรายการ</span>
+                </div>
+              </div>
+
+              <!-- 2. ตรงตามแนะนำแต่จำนวนไม่ตรง -->
+              <div class="breakdown-card card-qty-mismatch">
+                <div class="b-head">
+                  <span class="b-dot dot-qty-mismatch"></span>
+                  <span class="b-title">ตรงตามแนะนำแต่ยอดไม่ตรง</span>
+                </div>
+                <div class="b-body">
+                  <span class="b-val text-amber">{{ (active.qtyMismatchedQty || 0).toLocaleString() }} หน่วย</span>
+                  <span class="b-sub">{{ active.qtyMismatchedLines || 0 }} แถวรายการ</span>
+                </div>
+              </div>
+
+              <!-- 3. เปลี่ยนล็อต -->
+              <div class="breakdown-card card-mismatch">
+                <div class="b-head">
+                  <span class="b-dot dot-mismatch"></span>
+                  <span class="b-title">เปลี่ยนล็อต</span>
+                </div>
+                <div class="b-body">
+                  <span class="b-val text-rose">{{ (active.mismatchedQty || 0).toLocaleString() }} หน่วย</span>
+                  <span class="b-sub">{{ active.mismatchedLines }} แถวรายการ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route & Customer Section -->
+          <div class="modal-info-box">
+            <div class="info-row">
+              <span class="info-lbl">สายส่ง / เส้นทาง (Trip):</span>
+              <strong class="info-val">{{ active.route }}</strong>
+            </div>
+            @if (active.doNumber || active.doCount) {
+              <div class="info-row">
+                <span class="info-lbl">เลขที่ DO:</span>
+                <strong class="info-val font-mono">{{ active.doNumber || active.doCount }}</strong>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="so-modal-footer">
+          <button
+            type="button"
+            class="btn-view-so-detail"
+            (click)="selectSo(active.soNumber || active.batchCode); closeBatchDetail()">
+            ดูรายละเอียดเลข Batch ในหน้า SO →
+          </button>
+          <button type="button" class="btn-modal-dismiss" (click)="closeBatchDetail()">
+            ปิดหน้าต่าง
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

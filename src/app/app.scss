@@ -1,0 +1,28 @@
+.app-layout {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #f8fafc;
+  overflow-x: clip;
+}
+
+.main-content {
+  display: block;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+}

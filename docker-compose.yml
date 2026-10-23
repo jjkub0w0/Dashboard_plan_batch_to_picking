@@ -1,0 +1,28 @@
+services:
+  plan-batch-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: plan-batch-to-picking
+    restart: unless-stopped
+    ports:
+      - "9999:9999"   # Frontend Web App: http://<IP>:9999 หรือ http://localhost:9999
+      - "8888:8888"   # Backend API:     http://<IP>:8888/api หรือ http://localhost:8888/api
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./backend/.env:/app/backend/.env:ro
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=8888
+      - BACKEND_PORT=8888
+      - FRONTEND_PORT=9999
+      - TZ=Asia/Bangkok
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8888/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

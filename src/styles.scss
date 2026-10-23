@@ -1,0 +1,95 @@
+/* Global Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ป้องกันไม่ให้การคลิกลากเมาส์ (Drag) ไปเปิดโหมด Drag & Drop รูปภาพของเบราว์เซอร์ */
+img, svg {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* อนุญาตให้คลิกลากคลุมเพื่อไฮไลท์และคัดลอก (Drag to select & copy) ข้อความได้ทั่วทั้งระบบ */
+html, body, *, *::before, *::after {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* สี Highlight เวลาลากคลุมข้อความ ให้ชัดเจน สวยงาม */
+::selection {
+  background-color: #bae6fd;
+  color: #0f172a;
+}
+::-moz-selection {
+  background-color: #bae6fd;
+  color: #0f172a;
+}
+
+/* ล็อก user-select: none เฉพาะปุ่มกดและ Dropdown ควบคุมที่ไม่มีข้อความที่ต้องก๊อปปี้ */
+button:not(.so-link-btn), select, input[type="button"], input[type="submit"],
+.btn-export-excel, .date-picker-trigger {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ข้อความตัวเลขและโค้ดต่างๆ (รวมถึงเลข SO บนปุ่มลิงก์) สามารถลากคลุมและก๊อปปี้ได้แน่นอน 100% */
+.so-link-btn, .so-link-btn *, .code-text, td, th, p.date-display strong {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+:root {
+  --theme-primary: #059669;
+  --theme-primary-hover: #047857;
+  --theme-primary-light: #10b981;
+  --theme-primary-bg: #ecfdf5;
+  --theme-primary-border: #a7f3d0;
+  --theme-header-bg: #064e3b;
+  --theme-header-dark: #022c22;
+  --theme-header-border: #065f46;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  font-family: 'Prompt', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f6faf7;
+  color: #0f172a;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+app-root {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+button, input, select {
+  font-family: inherit;
+}
+
+/* Avoid the 300ms double-tap-zoom delay on touch screens for controls */
+button, a, .pill-btn, .control-btn, .quick-btn, .nav-tab-btn {
+  touch-action: manipulation;
+}
+
+/* Smooth horizontal scrolling for tables while allowing vertical touch gestures to smoothly scroll the page */
+.table-wrapper, .table-responsive {
+  overflow-x: auto;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}

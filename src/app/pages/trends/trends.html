@@ -1,0 +1,1011 @@
+<div class="trends-container">
+  <!-- Banner Header -->
+  <div class="banner-box">
+    <div class="banner-left">
+      <div class="sub-badge">
+        <span class="pulse-dot"></span>
+        <span>Snapshot Trend Analytics</span>
+      </div>
+      <h1 class="main-title">กราฟเส้นแนวโน้มความถูกต้องของ Batch</h1>
+      <p class="banner-desc">
+        วิเคราะห์ภาพรวมรายวัน เปรียบเทียบยอดรวมที่จัดตรงตาม Plan Batch และไม่ตรงตาม Plan จากประวัติทั้งหมด
+      </p>
+      @if (summaryKpi().totalDays > 0) {
+        <div class="date-range-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+            <line x1="16" x2="16" y1="2" y2="6"/>
+            <line x1="8" x2="8" y1="2" y2="6"/>
+            <line x1="3" x2="21" y1="10" y2="10"/>
+          </svg>
+          <span>ช่วงข้อมูล: <strong>{{ formatDateFull(summaryKpi().startDate) }}</strong> ถึง <strong>{{ formatDateFull(summaryKpi().endDate) }}</strong> (รวม {{ summaryKpi().totalDays }} วัน)</span>
+        </div>
+      }
+    </div>
+
+    <!-- Controls: Range Filters & Refresh -->
+    <div class="banner-controls">
+      <!-- Time Range Filter -->
+      <div class="control-group">
+        <span class="control-label">ช่วงเวลา:</span>
+        <div class="btn-group">
+          <button
+            type="button"
+            class="control-btn"
+            [class.active]="rangeFilter() === 'ALL'"
+            (click)="rangeFilter.set('ALL')"
+          >
+            ทั้งหมด
+          </button>
+          <button
+            type="button"
+            class="control-btn"
+            [class.active]="rangeFilter() === '30'"
+            (click)="rangeFilter.set('30')"
+          >
+            30 วันล่าสุด
+          </button>
+          <button
+            type="button"
+            class="control-btn"
+            [class.active]="rangeFilter() === '14'"
+            (click)="rangeFilter.set('14')"
+          >
+            14 วันล่าสุด
+          </button>
+          <button
+            type="button"
+            class="control-btn"
+            [class.active]="rangeFilter() === '7'"
+            (click)="rangeFilter.set('7')"
+          >
+            7 วันล่าสุด
+          </button>
+        </div>
+      </div>
+
+      <!-- Refresh Button -->
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="isLoading()"
+        (click)="loadTrendsData(true)"
+        title="รีเฟรชข้อมูลและสแกน Snapshot ใหม่ล่าสุด"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" [class.spin]="isLoading()">
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+          <path d="M16 16h5v5"/>
+        </svg>
+        <span>{{ isLoading() ? 'กำลังประมวลผล...' : 'สแกนข้อมูลใหม่' }}</span>
+      </button>
+    </div>
+  </div>
+
+  @if (errorMsg()) {
+    <div class="error-banner">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" x2="12" y1="8" y2="12"/>
+        <line x1="12" x2="12.01" y1="16" y2="16"/>
+      </svg>
+      <span>{{ errorMsg() }}</span>
+      <button type="button" class="retry-btn" (click)="loadTrendsData(true)">ลองใหม่อีกครั้ง</button>
+    </div>
+  }
+
+  <!-- Summary KPI Cards -->
+  <div class="kpi-grid">
+    <!-- Card 1: ค่าเฉลี่ยตรงตาม Plan -->
+    <div class="kpi-card match">
+      <div class="kpi-header">
+        <span class="kpi-title">เฉลี่ยตรงตาม Plan</span>
+        <div class="kpi-icon-wrap match">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-value text-emerald">{{ summaryKpi().avgMatchedPct.toFixed(1) }}<span class="unit">%</span></span>
+        <span class="kpi-sub">
+          ยอดตรงสะสม: <strong>{{ summaryKpi().matchedQty.toLocaleString() }}</strong> {{ getUnitLabel() }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 2: ค่าเฉลี่ยไม่ตรงตาม Plan -->
+    <div class="kpi-card mismatch">
+      <div class="kpi-header">
+        <span class="kpi-title">เฉลี่ยไม่ตรงตาม Plan</span>
+        <div class="kpi-icon-wrap mismatch">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" x2="9" y1="9" y2="15"/>
+            <line x1="9" x2="15" y1="9" y2="15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-value text-rose">{{ summaryKpi().avgMismatchedPct.toFixed(1) }}<span class="unit">%</span></span>
+        <span class="kpi-sub">
+          ยอดสลับสะสม: <strong>{{ summaryKpi().mismatchedQty.toLocaleString() }}</strong> {{ getUnitLabel() }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 3: วันที่ตรงสูงสุด -->
+    <div class="kpi-card best">
+      <div class="kpi-header">
+        <span class="kpi-title">วันที่ตรงสูงสุด (Best Day)</span>
+        <div class="kpi-icon-wrap best">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-body">
+        @if (summaryKpi().bestDay) {
+          <span class="kpi-value text-emerald">{{ summaryKpi().bestDay?.matchedPct }}<span class="unit">%</span></span>
+          <span class="kpi-sub cursor-pointer" (click)="navigateToDate(summaryKpi().bestDay!.date)" title="คลิกเพื่อเปิด Dashboard วันนี้">
+            วันที่: <strong>{{ formatDateFull(summaryKpi().bestDay!.date) }}</strong> ↗
+          </span>
+        } @else {
+          <span class="kpi-value">-</span>
+          <span class="kpi-sub">-</span>
+        }
+      </div>
+    </div>
+
+    <!-- Card 4: ยอดรวมสะสมทั้งหมด -->
+    <div class="kpi-card total">
+      <div class="kpi-header">
+        <span class="kpi-title">ยอดรวมทั้งหมด (Total)</span>
+        <div class="kpi-icon-wrap total">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M9 21V9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-body">
+        <span class="kpi-value text-slate">{{ summaryKpi().totalQty.toLocaleString() }}<span class="unit">{{ getUnitLabel() }}</span></span>
+        <span class="kpi-sub">
+          เฉลี่ยต่อวัน: <strong>{{ summaryKpi().totalDays > 0 ? (summaryKpi().totalQty / summaryKpi().totalDays | number:'1.0-0') : 0 }}</strong> {{ getUnitLabel() }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  @if (chartPoints().length === 0) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" x2="18" y1="20" y2="10"/>
+        <line x1="12" x2="12" y1="20" y2="4"/>
+        <line x1="6" x2="6" y1="20" y2="14"/>
+      </svg>
+      <p class="empty-title">ไม่พบข้อมูล Snapshot ในระบบ</p>
+      <p class="empty-sub">ระบบจะสแกนและดึงข้อมูลจากโฟลเดอร์ snapshots/ โดยอัตโนมัติเมื่อมีการซิงค์ข้อมูลประจำวัน</p>
+    </div>
+  } @else {
+    <!-- 2 Grid Columns: ส่วนที่ 1 (ตรงตาม Plan) & ส่วนที่ 2 (ไม่ตรงตาม Plan) -->
+    <div class="two-col-grid">
+      <!-- ================================================================================== -->
+      <!-- ส่วนที่ 2: กราฟเส้นข้อมูลที่จัดตรงตาม plan (Matched Plan Trend Chart) -->
+      <!-- ================================================================================== -->
+      <div class="chart-card half-card">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="section-badge badge-green">ส่วนที่ 1</div>
+            <h2 class="chart-title text-emerald-dark">กราฟเส้น ข้อมูลที่จัดตรงตาม Plan</h2>
+            <span class="chart-subtitle">เฉพาะยอดที่ตรงกับสเปกและ Batch ตามแผนงาน</span>
+          </div>
+          <div class="stat-pill pill-green">
+            <span>เฉลี่ย: <strong>{{ summaryKpi().avgMatchedPct.toFixed(1) }}%</strong></span>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <svg [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight" class="trend-svg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="gradMatchedOnly" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.30"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Grid Lines -->
+            @for (tick of yGridTicks(); track tick.pct) {
+              <g class="grid-line-group">
+                <line
+                  [attr.x1]="padding.left"
+                  [attr.y1]="tick.y"
+                  [attr.x2]="chartWidth - padding.right"
+                  [attr.y2]="tick.y"
+                  class="grid-line"
+                />
+                <text
+                  [attr.x]="padding.left - 10"
+                  [attr.y]="tick.y + 4"
+                  text-anchor="end"
+                  class="axis-label"
+                >
+                  {{ tick.pct }}%
+                </text>
+              </g>
+            }
+
+            <!-- Average Reference Line -->
+            <line
+              [attr.x1]="padding.left"
+              [attr.y1]="avgMatchedY()"
+              [attr.x2]="chartWidth - padding.right"
+              [attr.y2]="avgMatchedY()"
+              stroke="#059669"
+              stroke-width="1.5"
+              stroke-dasharray="5,5"
+              class="avg-line"
+            />
+            <text
+              [attr.x]="chartWidth - padding.right"
+              [attr.y]="avgMatchedY() - 6"
+              text-anchor="end"
+              class="avg-label text-emerald"
+            >
+              ค่าเฉลี่ย {{ summaryKpi().avgMatchedPct.toFixed(1) }}%
+            </text>
+
+            <!-- Month Group Background Bands & Vertical Boundary Lines (When rangeFilter is ALL) -->
+            @if (isAllRange()) {
+              @for (mg of monthGroups(); track mg.monthKey; let isLast = $last) {
+                <!-- Subtle alternating background band -->
+                <rect
+                  [attr.x]="mg.startX"
+                  [attr.y]="padding.top"
+                  [attr.width]="mg.width"
+                  [attr.height]="plotHeight"
+                  class="month-band"
+                  [class.alt]="mg.isOdd"
+                />
+
+                <!-- Vertical Enclosing Line (Left border of month) -->
+                <line
+                  [attr.x1]="mg.startX"
+                  [attr.y1]="padding.top"
+                  [attr.x2]="mg.startX"
+                  [attr.y2]="padding.top + plotHeight + 25"
+                  class="month-vertical-line"
+                />
+
+                <!-- Vertical Enclosing Line for the final month (Right border) -->
+                @if (isLast) {
+                  <line
+                    [attr.x1]="mg.endX"
+                    [attr.y1]="padding.top"
+                    [attr.x2]="mg.endX"
+                    [attr.y2]="padding.top + plotHeight + 25"
+                    class="month-vertical-line"
+                  />
+                }
+
+                <!-- Bottom Enclosing Bracket -->
+                <path
+                  [attr.d]="getMonthBracketPath(mg)"
+                  class="month-bracket-line"
+                />
+
+                <!-- Month Group Label -->
+                <text
+                  [attr.x]="mg.centerX"
+                  [attr.y]="padding.top + plotHeight + 40"
+                  text-anchor="middle"
+                  class="month-group-label"
+                >
+                  {{ mg.displayLabel }}
+                </text>
+              }
+            }
+
+            <!-- X-Axis Labels -->
+            @if (isAllRange()) {
+              @for (p of chartPoints(); track p.date) {
+                <g class="x-axis-group">
+                  <line
+                    [attr.x1]="p.x"
+                    [attr.y1]="padding.top + plotHeight"
+                    [attr.x2]="p.x"
+                    [attr.y2]="padding.top + plotHeight + 4"
+                    class="tick-mark"
+                  />
+                  <text
+                    [attr.x]="p.x"
+                    [attr.y]="padding.top + plotHeight + 13"
+                    text-anchor="middle"
+                    class="axis-label day-tick"
+                  >
+                    {{ p.dayNumber }}
+                  </text>
+                </g>
+              }
+            } @else {
+              @for (p of chartPoints(); track p.date) {
+                <g class="x-axis-group">
+                  <line
+                    [attr.x1]="p.x"
+                    [attr.y1]="padding.top + plotHeight"
+                    [attr.x2]="p.x"
+                    [attr.y2]="padding.top + plotHeight + 5"
+                    class="tick-mark"
+                  />
+                  <text
+                    [attr.x]="p.x"
+                    [attr.y]="padding.top + plotHeight + 20"
+                    text-anchor="middle"
+                    class="axis-label date-tick"
+                  >
+                    {{ p.shortLabel }}
+                  </text>
+                </g>
+              }
+            }
+
+            <!-- Area Fill -->
+            <path [attr.d]="matchedAreaPath()" fill="url(#gradMatchedOnly)" />
+
+            <!-- Line -->
+            <path [attr.d]="matchedLinePath()" fill="none" stroke="#059669" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="chart-line-path" />
+
+            <!-- Active Hover Guideline -->
+            @if (activeChartSection() === 'matched' && activeTooltipPoint()) {
+              <line
+                [attr.x1]="activeTooltipPoint()!.x"
+                [attr.y1]="padding.top"
+                [attr.x2]="activeTooltipPoint()!.x"
+                [attr.y2]="padding.top + plotHeight"
+                stroke="#047857"
+                stroke-width="1.5"
+                stroke-dasharray="4,4"
+              />
+            }
+
+            <!-- Dots -->
+            @for (p of chartPoints(); track p.date) {
+              <circle
+                [attr.cx]="p.x"
+                [attr.cy]="p.matchedY"
+                r="5"
+                fill="#059669"
+                stroke="#ffffff"
+                stroke-width="2.5"
+                class="data-dot dot-match"
+                [class.highlight]="hoveredIndex() === p.index && activeChartSection() === 'matched'"
+              />
+
+              <!-- Percentage Badge on Points -->
+              @if (!isAllRange() || hoveredIndex() === p.index) {
+                <text
+                  [attr.x]="p.x"
+                  [attr.y]="p.matchedY - 9"
+                  text-anchor="middle"
+                  class="point-label-text match"
+                  [class.highlight]="hoveredIndex() === p.index"
+                >
+                  {{ p.matchedPct }}%
+                </text>
+              }
+
+              <rect
+                [attr.x]="p.x - 20"
+                [attr.y]="padding.top"
+                width="40"
+                [attr.height]="plotHeight"
+                fill="transparent"
+                class="hover-hitbox"
+                (mouseenter)="onPointHover(p.index, 'matched')"
+                (mouseleave)="onPointHover(null, null)"
+                (click)="navigateToDate(p.date)"
+              />
+            }
+          </svg>
+
+          @if (activeChartSection() === 'matched' && activeTooltipPoint()) {
+            <div
+              class="chart-tooltip"
+              [class.align-right]="isNearRightEdge()"
+              [class.align-left]="isNearLeftEdge()"
+              [style.left.%]="tooltipLeftPct()"
+              [style.top.px]="30"
+            >
+              <div class="tooltip-header">
+                <span class="tooltip-date">{{ activeTooltipPoint()!.fullDateLabel }}</span>
+                <span class="tooltip-jump">คลิกดู Dashboard ↗</span>
+              </div>
+              <div class="tooltip-row text-emerald">
+                <span class="tt-label">ตรงตาม Plan:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.matchedPct }}%</strong>
+              </div>
+              <div class="tooltip-row text-slate">
+                <span class="tt-label">ยอดที่จัดตรง:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.matchedVal.toLocaleString() }} {{ getUnitLabel() }}</strong>
+              </div>
+              <div class="tooltip-row text-slate">
+                <span class="tt-label">ยอดรวมวันนั้น:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.totalVal.toLocaleString() }} {{ getUnitLabel() }}</strong>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ================================================================================== -->
+      <!-- ส่วนที่ 3: กราฟเส้นที่จัดไม่ตรงตาม plan (Mismatched Plan Trend Chart) -->
+      <!-- ================================================================================== -->
+      <div class="chart-card half-card">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="section-badge badge-red">ส่วนที่ 2</div>
+            <h2 class="chart-title text-rose-dark">กราฟเส้น ข้อมูลที่จัดไม่ตรงตาม Plan</h2>
+            <span class="chart-subtitle">เฉพาะยอดที่มีการเปลี่ยนล็อตหรือหยิบนอกแผนงาน</span>
+          </div>
+          <div class="stat-pill pill-rose">
+            <span>เฉลี่ย: <strong>{{ summaryKpi().avgMismatchedPct.toFixed(1) }}%</strong></span>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <svg [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight" class="trend-svg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="gradMismatchedOnly" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.30"/>
+                <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Grid Lines -->
+            @for (tick of yGridTicks(); track tick.pct) {
+              <g class="grid-line-group">
+                <line
+                  [attr.x1]="padding.left"
+                  [attr.y1]="tick.y"
+                  [attr.x2]="chartWidth - padding.right"
+                  [attr.y2]="tick.y"
+                  class="grid-line"
+                />
+                <text
+                  [attr.x]="padding.left - 10"
+                  [attr.y]="tick.y + 4"
+                  text-anchor="end"
+                  class="axis-label"
+                >
+                  {{ tick.pct }}%
+                </text>
+              </g>
+            }
+
+            <!-- Average Reference Line -->
+            <line
+              [attr.x1]="padding.left"
+              [attr.y1]="avgMismatchedY()"
+              [attr.x2]="chartWidth - padding.right"
+              [attr.y2]="avgMismatchedY()"
+              stroke="#e11d48"
+              stroke-width="1.5"
+              stroke-dasharray="5,5"
+              class="avg-line"
+            />
+            <text
+              [attr.x]="chartWidth - padding.right"
+              [attr.y]="avgMismatchedY() - 6"
+              text-anchor="end"
+              class="avg-label text-rose"
+            >
+              ค่าเฉลี่ย {{ summaryKpi().avgMismatchedPct.toFixed(1) }}%
+            </text>
+
+            <!-- Month Group Background Bands & Vertical Boundary Lines (When rangeFilter is ALL) -->
+            @if (isAllRange()) {
+              @for (mg of monthGroups(); track mg.monthKey; let isLast = $last) {
+                <!-- Subtle alternating background band -->
+                <rect
+                  [attr.x]="mg.startX"
+                  [attr.y]="padding.top"
+                  [attr.width]="mg.width"
+                  [attr.height]="plotHeight"
+                  class="month-band"
+                  [class.alt]="mg.isOdd"
+                />
+
+                <!-- Vertical Enclosing Line (Left border of month) -->
+                <line
+                  [attr.x1]="mg.startX"
+                  [attr.y1]="padding.top"
+                  [attr.x2]="mg.startX"
+                  [attr.y2]="padding.top + plotHeight + 25"
+                  class="month-vertical-line"
+                />
+
+                <!-- Vertical Enclosing Line for the final month (Right border) -->
+                @if (isLast) {
+                  <line
+                    [attr.x1]="mg.endX"
+                    [attr.y1]="padding.top"
+                    [attr.x2]="mg.endX"
+                    [attr.y2]="padding.top + plotHeight + 25"
+                    class="month-vertical-line"
+                  />
+                }
+
+                <!-- Bottom Enclosing Bracket -->
+                <path
+                  [attr.d]="getMonthBracketPath(mg)"
+                  class="month-bracket-line"
+                />
+
+                <!-- Month Group Label -->
+                <text
+                  [attr.x]="mg.centerX"
+                  [attr.y]="padding.top + plotHeight + 40"
+                  text-anchor="middle"
+                  class="month-group-label"
+                >
+                  {{ mg.displayLabel }}
+                </text>
+              }
+            }
+
+            <!-- X-Axis Labels -->
+            @if (isAllRange()) {
+              @for (p of chartPoints(); track p.date) {
+                <g class="x-axis-group">
+                  <line
+                    [attr.x1]="p.x"
+                    [attr.y1]="padding.top + plotHeight"
+                    [attr.x2]="p.x"
+                    [attr.y2]="padding.top + plotHeight + 4"
+                    class="tick-mark"
+                  />
+                  <text
+                    [attr.x]="p.x"
+                    [attr.y]="padding.top + plotHeight + 13"
+                    text-anchor="middle"
+                    class="axis-label day-tick"
+                  >
+                    {{ p.dayNumber }}
+                  </text>
+                </g>
+              }
+            } @else {
+              @for (p of chartPoints(); track p.date) {
+                <g class="x-axis-group">
+                  <line
+                    [attr.x1]="p.x"
+                    [attr.y1]="padding.top + plotHeight"
+                    [attr.x2]="p.x"
+                    [attr.y2]="padding.top + plotHeight + 5"
+                    class="tick-mark"
+                  />
+                  <text
+                    [attr.x]="p.x"
+                    [attr.y]="padding.top + plotHeight + 20"
+                    text-anchor="middle"
+                    class="axis-label date-tick"
+                  >
+                    {{ p.shortLabel }}
+                  </text>
+                </g>
+              }
+            }
+
+            <!-- Area Fill -->
+            <path [attr.d]="mismatchedAreaPath()" fill="url(#gradMismatchedOnly)" />
+
+            <!-- Line -->
+            <path [attr.d]="mismatchedLinePath()" fill="none" stroke="#e11d48" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="chart-line-path" />
+
+            <!-- Active Hover Guideline -->
+            @if (activeChartSection() === 'mismatched' && activeTooltipPoint()) {
+              <line
+                [attr.x1]="activeTooltipPoint()!.x"
+                [attr.y1]="padding.top"
+                [attr.x2]="activeTooltipPoint()!.x"
+                [attr.y2]="padding.top + plotHeight"
+                stroke="#be123c"
+                stroke-width="1.5"
+                stroke-dasharray="4,4"
+              />
+            }
+
+            <!-- Dots -->
+            @for (p of chartPoints(); track p.date) {
+              <circle
+                [attr.cx]="p.x"
+                [attr.cy]="p.mismatchedY"
+                r="5"
+                fill="#e11d48"
+                stroke="#ffffff"
+                stroke-width="2.5"
+                class="data-dot dot-mismatch"
+                [class.highlight]="hoveredIndex() === p.index && activeChartSection() === 'mismatched'"
+              />
+
+              <!-- Percentage Badge on Points -->
+              @if (!isAllRange() || hoveredIndex() === p.index) {
+                <text
+                  [attr.x]="p.x"
+                  [attr.y]="p.mismatchedY - 9"
+                  text-anchor="middle"
+                  class="point-label-text mismatch"
+                  [class.highlight]="hoveredIndex() === p.index"
+                >
+                  {{ p.mismatchedPct }}%
+                </text>
+              }
+
+              <rect
+                [attr.x]="p.x - 20"
+                [attr.y]="padding.top"
+                width="40"
+                [attr.height]="plotHeight"
+                fill="transparent"
+                class="hover-hitbox"
+                (mouseenter)="onPointHover(p.index, 'mismatched')"
+                (mouseleave)="onPointHover(null, null)"
+                (click)="navigateToDate(p.date)"
+              />
+            }
+          </svg>
+
+          @if (activeChartSection() === 'mismatched' && activeTooltipPoint()) {
+            <div
+              class="chart-tooltip"
+              [class.align-right]="isNearRightEdge()"
+              [class.align-left]="isNearLeftEdge()"
+              [style.left.%]="tooltipLeftPct()"
+              [style.top.px]="30"
+            >
+              <div class="tooltip-header">
+                <span class="tooltip-date">{{ activeTooltipPoint()!.fullDateLabel }}</span>
+                <span class="tooltip-jump">คลิกดู Dashboard ↗</span>
+              </div>
+              <div class="tooltip-row text-rose">
+                <span class="tt-label">ไม่ตรงตาม Plan:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.mismatchedPct }}%</strong>
+              </div>
+              <div class="tooltip-row text-slate">
+                <span class="tt-label">ยอดที่ไม่ตรง:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.mismatchedVal.toLocaleString() }} {{ getUnitLabel() }}</strong>
+              </div>
+              <div class="tooltip-row text-slate">
+                <span class="tt-label">ยอดรวมวันนั้น:</span>
+                <strong class="tt-val">{{ activeTooltipPoint()!.totalVal.toLocaleString() }} {{ getUnitLabel() }}</strong>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================================== -->
+    <!-- Detailed Breakdown Table -->
+    <!-- ================================================================================== -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title-group">
+          <h2 class="table-title">ตารางสรุปสถิติความถูกต้องรายวัน (Daily Snapshot Table)</h2>
+          <span class="table-subtitle">แสดงสถิติยอดรวม QTY, ความถูกต้อง %, และจำนวน SO ของแต่ละวันที่พบใน Snapshot</span>
+        </div>
+        <div class="table-search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" x2="16.65" y1="21" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="ค้นหาวันที่..."
+            [ngModel]="tableSearch()"
+            (ngModelChange)="tableSearch.set($event)"
+            class="search-input"
+          />
+        </div>
+      </div>
+
+      <!-- แถบเลือกคอลัมน์ข้อมูลที่ต้องการดู (แสดงเฉพาะบนจอเล็ก/แท็บเล็ต iPad / มือถือ) -->
+      <div class="mobile-column-filter-bar">
+        <div class="col-filter-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"/>
+            <line x1="4" y1="10" x2="4" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12" y2="3"/>
+            <line x1="20" y1="21" x2="20" y2="16"/>
+            <line x1="20" y1="12" x2="20" y2="3"/>
+            <line x1="1" y1="14" x2="7" y2="14"/>
+            <line x1="9" y1="8" x2="15" y2="8"/>
+            <line x1="17" y1="16" x2="23" y2="16"/>
+          </svg>
+          <span>เลือกข้อมูลที่ต้องการดู:</span>
+        </div>
+
+        <div class="col-filter-pills">
+          <!-- 1. วันที่ (บังคับแสดงตลอด / ล็อค) -->
+          <button type="button" class="col-toggle-pill pill-locked" title="วันที่แสดงตลอด">
+            <span class="pill-icon">✓</span>
+            <span class="pill-name">วันที่</span>
+            <span class="pill-lock-badge">บังคับ</span>
+          </button>
+
+          <!-- 2. ยอดรวม QTY -->
+          <button type="button" 
+                  class="col-toggle-pill"
+                  [class.active]="mobileCols().totalQty"
+                  (click)="toggleMobileCol('totalQty')">
+            <span class="pill-icon">{{ mobileCols().totalQty ? '✓' : '+' }}</span>
+            <span class="pill-name">ยอดรวม QTY</span>
+          </button>
+
+          <!-- 3. ตรงตาม Plan (QTY) -->
+          <button type="button" 
+                  class="col-toggle-pill"
+                  [class.active]="mobileCols().matchedQty"
+                  (click)="toggleMobileCol('matchedQty')">
+            <span class="pill-icon">{{ mobileCols().matchedQty ? '✓' : '+' }}</span>
+            <span class="pill-name">ตรงตาม Plan (QTY)</span>
+          </button>
+
+          <!-- 4. ไม่ตรงตาม Plan (QTY) -->
+          <button type="button" 
+                  class="col-toggle-pill"
+                  [class.active]="mobileCols().mismatchedQty"
+                  (click)="toggleMobileCol('mismatchedQty')">
+            <span class="pill-icon">{{ mobileCols().mismatchedQty ? '✓' : '+' }}</span>
+            <span class="pill-name">ไม่ตรงตาม Plan (QTY)</span>
+          </button>
+
+          <!-- 5. % ตรง Plan -->
+          <button type="button" 
+                  class="col-toggle-pill"
+                  [class.active]="mobileCols().matchedPct"
+                  (click)="toggleMobileCol('matchedPct')">
+            <span class="pill-icon">{{ mobileCols().matchedPct ? '✓' : '+' }}</span>
+            <span class="pill-name">% ตรง Plan</span>
+          </button>
+
+          <!-- 6. % ไม่ตรง Plan -->
+          <button type="button" 
+                  class="col-toggle-pill"
+                  [class.active]="mobileCols().mismatchedPct"
+                  (click)="toggleMobileCol('mismatchedPct')">
+            <span class="pill-icon">{{ mobileCols().mismatchedPct ? '✓' : '+' }}</span>
+            <span class="pill-name">% ไม่ตรง Plan</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table"
+               [class.col-show-total-qty]="mobileCols().totalQty"
+               [class.col-show-matched-qty]="mobileCols().matchedQty"
+               [class.col-show-mismatched-qty]="mobileCols().mismatchedQty"
+               [class.col-show-matched-pct]="mobileCols().matchedPct"
+               [class.col-show-mismatched-pct]="mobileCols().mismatchedPct">
+          <thead>
+            <tr>
+              <th class="th-date cursor-pointer" (click)="toggleTableSort()" title="คลิกเพื่อสลับเรียง วันที่ล่าสุด / วันที่เก่าสุด">
+                <span>วันที่</span>
+                <span class="sort-indicator">{{ tableSortOrder() === 'desc' ? ' ▼ ล่าสุด' : ' ▲ เก่าสุด' }}</span>
+              </th>
+              <th class="th-num col-total-qty">ยอดรวม QTY</th>
+              <th class="th-num col-matched-qty">ตรงตาม Plan (QTY)</th>
+              <th class="th-num col-mismatched-qty">ไม่ตรงตาม Plan (QTY)</th>
+              <th class="th-pct col-matched-pct">% ตรง Plan</th>
+              <th class="th-pct col-mismatched-pct">% ไม่ตรง Plan</th>
+              <th class="th-action"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of filteredTableData(); track row.date) {
+              <tr class="table-row" (click)="navigateToDate(row.date)" title="คลิกเพื่อเปิด Dashboard วันที่ {{ formatDateFull(row.date) }}">
+                <td class="td-date">
+                  <div class="date-cell">
+                    <span class="date-main">{{ formatDateFull(row.date) }}</span>
+                    <span class="date-iso">{{ row.date }}</span>
+                  </div>
+                </td>
+                <td class="td-num col-total-qty font-semibold">{{ row.totalQty.toLocaleString() }}</td>
+                <td class="td-num col-matched-qty text-emerald font-semibold">{{ row.matchedQty.toLocaleString() }}</td>
+                <td class="td-num col-mismatched-qty text-rose font-semibold">{{ row.mismatchedQty.toLocaleString() }}</td>
+                <td class="td-pct col-matched-pct">
+                  <span class="pct-badge" [class.badge-high]="row.matchedPct >= 80" [class.badge-mid]="row.matchedPct >= 50 && row.matchedPct < 80" [class.badge-low]="row.matchedPct < 50">
+                    {{ row.matchedPct }}%
+                  </span>
+                </td>
+                <td class="td-pct col-mismatched-pct">
+                  <span class="pct-badge-mis" [class.mis-high]="row.mismatchedPct > 50" [class.mis-mid]="row.mismatchedPct > 20 && row.mismatchedPct <= 50" [class.mis-low]="row.mismatchedPct <= 20">
+                    {{ row.mismatchedPct }}%
+                  </span>
+                </td>
+                <td class="td-action">
+                  <button type="button" class="btn-view-dash desktop-btn" (click)="navigateToDate(row.date); $event.stopPropagation()">
+                    ดู Dashboard ↗
+                  </button>
+                  <button type="button" class="btn-daily-more mobile-btn" (click)="openDailyDetail(row); $event.stopPropagation()" title="ดูข้อมูลทั้งหมดของวันนี้">
+                    ⋮
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Daily Detail Modal for Trends (แสดงเมื่อกดปุ่มจุดไข่ปลา ⋮ บนจอเล็ก) -->
+  @if (selectedDailyDetail(); as active) {
+    <div class="daily-modal-backdrop" (click)="closeDailyDetail()">
+      <div class="daily-modal-dialog" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="daily-modal-header">
+          <div class="modal-title-group">
+            <span class="modal-badge">สรุปข้อมูลประจำวัน</span>
+            <h3 class="modal-heading">{{ formatDateFull(active.date) }}</h3>
+            <span class="modal-sub">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              {{ active.date }}
+            </span>
+          </div>
+          <button type="button" class="btn-modal-close" (click)="closeDailyDetail()" aria-label="ปิดหน้าต่าง">
+            ✕
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="daily-modal-body">
+          <!-- Summary Card -->
+          <div class="modal-summary-card">
+            <div class="modal-summary-stats">
+              <div class="m-stat-box">
+                <span class="m-lbl">ยอดรวมสินค้าทั้งวัน</span>
+                <span class="m-val text-dark font-bold">{{ active.totalQty.toLocaleString() }} <small>{{ getUnitLabel() }}</small></span>
+              </div>
+              <div class="m-stat-box">
+                <span class="m-lbl">คำสั่งซื้อ (SO) ทั้งหมด</span>
+                <span class="m-val font-bold">{{ active.totalSOs }} <small>SO</small></span>
+              </div>
+              <div class="m-stat-box highlight-stat">
+                <span class="m-lbl">ความถูกต้องภาพรวม</span>
+                <span class="m-val text-emerald font-bold">{{ active.matchedPct }}%</span>
+              </div>
+            </div>
+
+            <!-- Visual Proportion Bar -->
+            <div class="modal-progress-wrap">
+              <div class="modal-progress-header">
+                <span class="prog-lbl-left">ตรงตามแนะนำ: <strong>{{ active.matchedPct }}%</strong></span>
+                <span class="prog-lbl-right">เปลี่ยนล็อต: <strong>{{ active.mismatchedPct }}%</strong></span>
+              </div>
+              <div class="modal-progress-bar">
+                <div class="prog-fill match" [style.width.%]="active.matchedPct" title="ตรงตามแนะนำ: {{ active.matchedPct }}%"></div>
+                @if ((active.qtyMismatchedPct ?? 0) > 0) {
+                  <div class="prog-fill qty-mismatch" [style.width.%]="active.qtyMismatchedPct" title="ล็อตตรงแต่ยอดไม่ตรง: {{ active.qtyMismatchedPct }}%"></div>
+                }
+                <div class="prog-fill mismatch" [style.width.%]="active.mismatchedPct" title="เปลี่ยนล็อตจริง: {{ active.mismatchedPct }}%"></div>
+                @if ((active.pendingPct ?? 0) > 0) {
+                  <div class="prog-fill pending" [style.width.%]="active.pendingPct" title="รอข้อมูล SAP: {{ active.pendingPct }}%"></div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Breakdown Cards Grid -->
+          <div class="modal-breakdown-section">
+            <h4 class="section-heading">สัดส่วนความถูกต้อง (Accuracy Breakdown)</h4>
+
+            <div class="breakdown-cards-grid">
+              <!-- ตรงตามแนะนำ (MATCH) -->
+              <div class="breakdown-card card-match">
+                <div class="b-head">
+                  <span class="b-dot dot-match"></span>
+                  <span class="b-title">จัดตรงตามแนะนำ</span>
+                </div>
+                <div class="b-body">
+                  <div class="b-val-group">
+                    <span class="b-val text-emerald">{{ active.matchedQty.toLocaleString() }}</span>
+                    <span class="b-unit">{{ getUnitLabel() }}</span>
+                  </div>
+                  <div class="b-tags">
+                    <span class="b-tag tag-emerald">สัดส่วน {{ active.matchedPct }}%</span>
+                    <span class="b-tag tag-neutral">{{ active.matchedLines }} แถว</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ล็อตตรงแต่ยอดไม่ตรง (QTY_MISMATCH) -->
+              @if ((active.qtyMismatchedQty ?? 0) > 0) {
+                <div class="breakdown-card card-qty-mismatch">
+                  <div class="b-head">
+                    <span class="b-dot dot-qty-mismatch"></span>
+                    <span class="b-title">ล็อตตรงแต่ยอดไม่ตรง</span>
+                  </div>
+                  <div class="b-body">
+                    <div class="b-val-group">
+                      <span class="b-val text-amber">{{ (active.qtyMismatchedQty ?? 0).toLocaleString() }}</span>
+                      <span class="b-unit">{{ getUnitLabel() }}</span>
+                    </div>
+                    <div class="b-tags">
+                      <span class="b-tag tag-amber">สัดส่วน {{ active.qtyMismatchedPct ?? 0 }}%</span>
+                      <span class="b-tag tag-neutral">{{ active.qtyMismatchedLines ?? 0 }} แถว</span>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <!-- มีการเปลี่ยนล็อตจริง (MISMATCH) -->
+              <div class="breakdown-card card-mismatch">
+                <div class="b-head">
+                  <span class="b-dot dot-mismatch"></span>
+                  <span class="b-title">มีการเปลี่ยนล็อตจริง</span>
+                </div>
+                <div class="b-body">
+                  <div class="b-val-group">
+                    <span class="b-val text-rose">{{ active.mismatchedQty.toLocaleString() }}</span>
+                    <span class="b-unit">{{ getUnitLabel() }}</span>
+                  </div>
+                  <div class="b-tags">
+                    <span class="b-tag tag-rose">สัดส่วน {{ active.mismatchedPct }}%</span>
+                    <span class="b-tag tag-neutral">{{ active.mismatchedLines }} แถว</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- รอข้อมูล SAP / Pending -->
+              @if ((active.pendingQty ?? 0) > 0) {
+                <div class="breakdown-card card-pending">
+                  <div class="b-head">
+                    <span class="b-dot dot-pending"></span>
+                    <span class="b-title">รอข้อมูล SAP</span>
+                  </div>
+                  <div class="b-body">
+                    <div class="b-val-group">
+                      <span class="b-val text-slate">{{ (active.pendingQty ?? 0).toLocaleString() }}</span>
+                      <span class="b-unit">{{ getUnitLabel() }}</span>
+                    </div>
+                    <div class="b-tags">
+                      <span class="b-tag tag-slate">สัดส่วน {{ active.pendingPct ?? 0 }}%</span>
+                      <span class="b-tag tag-neutral">{{ active.pendingLines ?? 0 }} แถว</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="daily-modal-footer">
+          <button
+            type="button"
+            class="btn-view-dash-modal"
+            (click)="navigateToDate(active.date); closeDailyDetail()">
+            <span>เปิดดู Dashboard วันนี้</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </button>
+          <button type="button" class="btn-modal-dismiss" (click)="closeDailyDetail()">
+            ปิดหน้าต่าง
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,17 @@
+﻿# Backend Dependencies
+node_modules/
+
+# Environment files (Sensitive Credentials & Keys)
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Temporary and Export files
+data/exports/*.xlsx
+!data/exports/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep

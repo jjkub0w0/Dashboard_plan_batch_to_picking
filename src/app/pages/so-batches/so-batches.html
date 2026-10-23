@@ -1,0 +1,645 @@
+<div class="so-batches-page">
+  <!-- Title & Date Context Banner -->
+  <div class="banner-box">
+    <div class="banner-text">
+      <div class="sub-badge">
+        <span class="pulse-dot"></span>
+        ระบบติดตามและตรวจสอบการจัดสินค้า (Warehouse Picking Verification)
+      </div>
+      <h1 class="main-title">รายละเอียดเลข Batch ทั้งหมดตาม SO</h1>
+      <p class="date-display">
+        แสดงข้อมูลประจำ: <strong>{{ dateService.fullDateLabel() }}</strong>
+        @if (dateService.isToday()) {
+          <span class="badge-today">วันนี้</span>
+        }
+        <span class="iso-tag" title="วันที่: YYYY-MM-DD">{{ dateService.isoDate() }}</span>
+        @if (dateService.isSyncing() || isLoading()) {
+          <span class="sync-badge loading">กำลังเชื่อมต่อข้อมูล...</span>
+        } @else if (isFromCache()) {
+          <span class="sync-badge cache" title="ใช้งานข้อมูลจากไฟล์ .json ที่บันทึกไว้แล้ว">ข้อมูลจากไฟล์บันทึก</span>
+        } @else if (syncStatus()) {
+          <span class="sync-badge success">ดึงข้อมูลใหม่จาก 3 ระบบเรียบร้อย</span>
+        }
+      </p>
+    </div>
+
+    <div class="banner-quick-stats">
+      <div class="quick-pill">
+        <span class="q-label">SO ทั้งหมด:</span>
+        <span class="q-val">{{ uniqueSoList().length }} คำสั่งซื้อ</span>
+      </div>
+      <div class="banner-actions">
+        <button 
+          type="button" 
+          class="btn-export-excel" 
+          [disabled]="isLoading() || isExporting() || dateService.isSyncing()" 
+          (click)="exportExcel()"
+          aria-label="export Excel"
+          title="ดาวน์โหลดรายงานแดชบอร์ดในรูปแบบ Excel (.xlsx)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" x2="12" y1="15" y2="3"/>
+          </svg>
+          <span class="btn-label">
+          @if (isExporting()) {
+            กำลังexport...
+          } @else {
+            export Excel
+          }
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container Card -->
+  <div class="data-table-card batch-container-card" [class.is-loading-data]="isLoading()">
+    <div class="table-card-head">
+      <div class="title-group">
+        <div class="container-badge">ข้อมูลเลข Batch เปรียบเทียบตามคำสั่งซื้อ</div>
+        <h2 class="table-card-title">เปรียบเทียบเลข Batch แยกตาม DO และ SKU</h2>
+        <span class="table-card-desc">แสดงข้อมูล <strong>Plan Batch (FirstBatch จาก S3)</strong> เปรียบเทียบกับ <strong>Batch (ที่ได้จาก SAP)</strong> แยกตามใบส่งของ (DO) และรายการสินค้า (SKU)</span>
+      </div>
+    </div>
+
+    <!-- Controls Toolbar (จัดแถบควบคุมแบบเต็มความกว้าง เป็นระเบียบ ชัดเจน) -->
+    <div class="batch-controls-toolbar">
+      <div class="toolbar-left-group">
+        <!-- Dropdown เลือก SO -->
+        <div class="select-group">
+          <label class="control-label" for="so-select">เลือก SO:</label>
+          <select id="so-select" class="so-select-dropdown" [value]="selectedSoFilter()" (change)="onSoFilterChange($event)">
+            <option value="ALL">แสดงทุกคำสั่งซื้อ (ทั้งหมด {{ uniqueSoList().length }} SO)</option>
+            @for (opt of uniqueSoList(); track opt.so) {
+              <option [value]="opt.so">
+                SO: {{ opt.so }} ({{ opt.doCount }} DO) - {{ opt.customer || opt.route }} [ตรง {{ opt.matchRate }}%]
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Filter สถานะ -->
+        <div class="filter-group">
+          <span class="control-label">สถานะ:</span>
+          <div class="filter-pills">
+            <button
+              type="button"
+              class="pill-btn"
+              [class.active]="batchMatchFilter() === 'ALL'"
+              (click)="setMatchFilter('ALL')">
+              ทั้งหมด ({{ matchStatusCounts().all }})
+            </button>
+            <button
+              type="button"
+              class="pill-btn pill-match"
+              [class.active]="batchMatchFilter() === 'MATCH'"
+              (click)="setMatchFilter('MATCH')">
+              ตรงตามแนะนำ
+            </button>
+            <button
+              type="button"
+              class="pill-btn pill-qty-mismatch"
+              [class.active]="batchMatchFilter() === 'QTY_MISMATCH'"
+              (click)="setMatchFilter('QTY_MISMATCH')">
+              <span class="pill-text-full"> ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+              <span class="pill-text-short">ยอดไม่ตรง</span>
+            </button>
+            <button
+              type="button"
+              class="pill-btn pill-mismatch"
+              [class.active]="batchMatchFilter() === 'MISMATCH'"
+              (click)="setMatchFilter('MISMATCH')">
+              เปลี่ยนล็อต
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-right-group">
+        <!-- Search Input -->
+        <div class="search-wrap">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="ค้นหา SO, DO, Material หรือเลข Batch..."
+            [value]="batchSearchQuery()"
+            (input)="onSearchChange($event)" />
+          @if (batchSearchQuery()) {
+            <button type="button" class="btn-clear-search-icon" (click)="batchSearchQuery.set('')" title="ล้างคำค้นหา">
+              ✕
+            </button>
+          }
+        </div>
+
+        @if (batchSearchQuery() || selectedSoFilter() !== 'ALL' || batchMatchFilter() !== 'ALL') {
+          <button type="button" class="btn-reset-all" (click)="resetBatchFilters()" title="ล้างตัวกรองทั้งหมด" aria-label="reset filters">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="m15 9-6 6"/>
+              <path d="m9 9 6 6"/>
+            </svg>
+            <span class="btn-label">ล้างตัวกรองทั้งหมด</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- แถบเลือกคอลัมน์ที่ต้องการดู (แสดงเฉพาะบนจอขนาดเล็ก / Tablet / Mobile) -->
+    <div class="mobile-column-filter-bar">
+      <div class="col-filter-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"/>
+          <line x1="4" y1="10" x2="4" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12" y2="3"/>
+          <line x1="20" y1="21" x2="20" y2="16"/>
+          <line x1="20" y1="12" x2="20" y2="3"/>
+          <line x1="1" y1="14" x2="7" y2="14"/>
+          <line x1="9" y1="8" x2="15" y2="8"/>
+          <line x1="17" y1="16" x2="23" y2="16"/>
+        </svg>
+        <span>เลือกข้อมูลที่ต้องการดู:</span>
+      </div>
+
+      <div class="col-filter-pills">
+        <!-- 1. รหัสสินค้า (บังคับแสดงตลอด / ล็อค) -->
+        <button type="button" class="col-toggle-pill pill-locked" title="รหัสสินค้าแสดงตลอด">
+          <span class="pill-icon">✓</span>
+          <span class="pill-name">รหัสสินค้า</span>
+          <span class="pill-lock-badge">บังคับ</span>
+        </button>
+
+        <!-- 2. ชื่อสินค้า -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().desc"
+                (click)="toggleMobileCol('desc')">
+          <span class="pill-icon">{{ mobileCols().desc ? '✓' : '+' }}</span>
+          <span class="pill-name">ชื่อสินค้า</span>
+        </button>
+
+        <!-- 3. Plan Batch -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().plan"
+                (click)="toggleMobileCol('plan')">
+          <span class="pill-icon">{{ mobileCols().plan ? '✓' : '+' }}</span>
+          <span class="pill-name">Plan Batch</span>
+        </button>
+
+        <!-- 4. จัดจริง (SAP) -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().sap"
+                (click)="toggleMobileCol('sap')">
+          <span class="pill-icon">{{ mobileCols().sap ? '✓' : '+' }}</span>
+          <span class="pill-name">จัดจริง (SAP)</span>
+        </button>
+
+        <!-- 5. จำนวน (QTY) -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().qty"
+                (click)="toggleMobileCol('qty')">
+          <span class="pill-icon">{{ mobileCols().qty ? '✓' : '+' }}</span>
+          <span class="pill-name">จำนวน</span>
+        </button>
+
+        <!-- 6. สถานะ -->
+        <button type="button" 
+                class="col-toggle-pill"
+                [class.active]="mobileCols().status"
+                (click)="toggleMobileCol('status')">
+          <span class="pill-icon">{{ mobileCols().status ? '✓' : '+' }}</span>
+          <span class="pill-name">สถานะ</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Strip -->
+    <div class="batch-summary-strip">
+      <div class="summary-meta-section">
+        <div class="meta-item meta-so-chip">
+          <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span class="meta-label">SO ที่เลือก:</span>
+          <strong class="meta-so-badge">
+            {{ selectedSoFilter() === 'ALL' ? 'ทุกคำสั่งซื้อ (' + uniqueSoList().length + ' SO)' : 'SO ' + selectedSoFilter() }}
+          </strong>
+        </div>
+
+        <div class="meta-divider"></div>
+
+        <div class="meta-item">
+          <span class="meta-label">จำนวนแถวรายการ:</span>
+          <strong class="meta-val">{{ containerStats().totalLines }} รายการ</strong>
+        </div>
+
+        <div class="meta-divider"></div>
+
+        <div class="meta-item">
+          <span class="meta-label">ปริมาณรวม:</span>
+          <strong class="meta-val text-dark font-bold">
+            {{ containerStats().totalQty.toLocaleString() }}
+          </strong>
+        </div>
+      </div>
+
+      <div class="summary-status-section">
+        <div class="status-kpi-chip chip-success">
+          <span class="status-dot dot-emerald"></span>
+          <span class="kpi-label">ตรงตามแนะนำ:</span>
+          <strong class="kpi-val text-emerald">
+            {{ containerStats().matched }} รายการ
+          </strong>
+          <span class="kpi-qty text-emerald">({{ containerStats().matchedQty.toLocaleString() }})</span>
+        </div>
+
+        @if (containerStats().qtyMismatched > 0) {
+          <div class="status-kpi-chip chip-amber">
+            <span class="status-dot dot-amber"></span>
+            <span class="kpi-label">ตรงตามแนะนำแต่จำนวนไม่ตรง:</span>
+            <strong class="kpi-val text-amber">
+              {{ containerStats().qtyMismatched }} รายการ
+            </strong>
+            <span class="kpi-qty text-amber">({{ containerStats().qtyMismatchedQty.toLocaleString() }})</span>
+          </div>
+        }
+
+        @if (containerStats().mismatched > 0) {
+          <div class="status-kpi-chip chip-warning">
+            <span class="status-dot dot-rose"></span>
+            <span class="kpi-label">เปลี่ยนล็อต:</span>
+            <strong class="kpi-val text-rose">
+              {{ containerStats().mismatched }} รายการ
+            </strong>
+            <span class="kpi-qty text-rose">({{ containerStats().mismatchedQty.toLocaleString() }})</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- SO -> DO -> SKU Hierarchy Cards -->
+    <div class="so-hierarchy-wrapper">
+      @for (soGroup of groupedSoDoHierarchy(); track soGroup.soNumber) {
+        <div class="so-group-card">
+          <!-- Level 1: SO Header -->
+          <div class="so-group-header">
+            <div class="so-header-info">
+              <span class="so-badge-code">SO: {{ soGroup.soNumber }}</span>
+              <span class="type-pill" [class.type-posto]="soGroup.orderType === 'POSTO'">{{ soGroup.orderType }}</span>
+              <span class="so-route-tag">{{ soGroup.route }}</span>
+              @if (soGroup.customer) {
+                <span class="so-customer-tag">{{ soGroup.customer }}</span>
+              }
+            </div>
+            <div class="so-header-metrics">
+              <span class="so-metric-pill">{{ soGroup.totalDos }} DO</span>
+              <span class="so-metric-pill">{{ soGroup.totalLines }} SKU</span>
+              <span class="so-metric-pill font-bold text-dark">
+                {{ soGroup.totalQty.toLocaleString() }}
+              </span>
+              @if (soGroup.totalLines > 0 && soGroup.totalLines === soGroup.pendingLines) {
+                <span class="so-match-badge badge-pending">
+                  รอข้อมูล SAP
+                </span>
+              } @else {
+                <span class="so-match-badge"
+                      [class.badge-pass]="soGroup.matchRate === 100"
+                      [class.badge-amber]="soGroup.matchRate < 100 && soGroup.mismatchedLines === 0"
+                      [class.badge-warn]="soGroup.matchRate < 100 && soGroup.mismatchedLines > 0">
+                  ตรงตามแนะนำ {{ soGroup.matchRate }}%
+                </span>
+              }
+            </div>
+          </div>
+
+          <!-- Level 2: DO Sections -->
+          <div class="do-groups-wrap">
+            @for (doGroup of soGroup.dos; track doGroup.doNumber) {
+              <div class="do-group-block">
+                <div class="do-block-header">
+                  <div class="do-title-info">
+                    <span class="do-prefix">เลขที่ DO:</span>
+                    <strong class="do-num-val">{{ doGroup.doNumber }}</strong>
+                    @if (doGroup.customer) {
+                      <span class="do-cust-hint">{{ doGroup.customer }}</span>
+                    }
+                  </div>
+                  <div class="do-title-metrics">
+                    <span class="do-metric-text">{{ doGroup.totalLines }} SKU</span>
+                    <span class="do-metric-text font-bold text-dark">
+                      {{ doGroup.totalQty.toLocaleString() }}
+                    </span>
+                    @if (doGroup.qtyMismatchedLines > 0) {
+                      <span class="do-metric-text text-amber font-semibold" title="ตรงตามแนะนำแต่จำนวนไม่ตรง">
+                        ยอดไม่ตรง {{ doGroup.qtyMismatchedLines }} SKU
+                      </span>
+                    }
+                    @if (doGroup.totalLines > 0 && doGroup.totalLines === doGroup.pendingLines) {
+                      <span class="do-rate-text text-slate">
+                        รอข้อมูล SAP
+                      </span>
+                    } @else {
+                      <span class="do-rate-text"
+                            [class.text-emerald]="doGroup.matchRate === 100"
+                            [class.text-amber]="doGroup.matchRate < 100 && doGroup.mismatchedLines === 0"
+                            [class.text-rose]="doGroup.matchRate < 100 && doGroup.mismatchedLines > 0">
+                        ตรง {{ doGroup.matchRate }}% ({{ doGroup.matchedLines }}/{{ doGroup.totalLines }})
+                      </span>
+                    }
+                  </div>
+                </div>
+
+                <!-- Level 3: SKU Breakdown Table -->
+                <div class="table-wrapper">
+                  <table class="batch-report-table sku-detail-table"
+                         [class.col-show-desc]="mobileCols().desc"
+                         [class.col-show-plan]="mobileCols().plan"
+                         [class.col-show-sap]="mobileCols().sap"
+                         [class.col-show-qty]="mobileCols().qty"
+                         [class.col-show-status]="mobileCols().status">
+                    <thead>
+                      <tr>
+                        <th class="col-no text-center">ลำดับ</th>
+                        <th class="col-material">รหัสสินค้า (Material)</th>
+                        <th class="col-desc">ชื่อรายการสินค้า (Description)</th>
+                        <th class="col-plan-batch">Plan Batch ที่ระบบแนะนำ </th>
+                        <th class="col-sap-batch">ล็อตที่ใช้</th>
+                        <th class="col-qty text-right">จำนวน (QTY)</th>
+                        <th class="col-status text-center">สถานะ</th>
+                        <th class="col-action text-center"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (sku of doGroup.skus; track (sku.material + '_' + (sku.item || ''))) {
+                        <tr [class.row-mismatch]="sku.status === 'MISMATCH' && sku.sapBatches.length > 0"
+                            [class.row-qty-mismatch]="sku.status === 'QTY_MISMATCH'">
+                          <td class="col-no text-center text-slate-400 font-mono">{{ $index + 1 }}</td>
+                          <td class="col-material">
+                            <span class="code-text font-semibold text-emerald-dark">{{ sku.material }}</span>
+                            @if (sku.item) {
+                              <span class="item-tag-code">({{ sku.item }})</span>
+                            }
+                            <span class="mobile-sku-desc" [class.hide-mobile-desc]="mobileCols().desc" [title]="sku.skuDescription">{{ sku.skuDescription }}</span>
+                          </td>
+                          <td class="col-desc">
+                            <span class="item-desc" [title]="sku.skuDescription">{{ sku.skuDescription }}</span>
+                          </td>
+                          <td class="col-plan-batch">
+                            <div class="batch-pill-list">
+                              @for (pb of sku.planBatches; track $index) {
+                                @if (pb.isNoPlan) {
+                                  <div class="batch-chip no-plan-chip">
+                                    <span class="chip-batch-code no-plan-text">ไม่ได้ plant ไว้ </span>
+                                    @if (pb.qty) {
+                                      <span class="chip-qty">({{ pb.qty }} {{ pb.unit || (sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง') }})</span>
+                                    }
+                                  </div>
+                                } @else {
+                                  <div class="batch-chip"
+                                       [class.chip-pending]="sku.sapBatches.length === 0"
+                                       [class.chip-matched]="sku.sapBatches.length > 0 && pb.match && pb.qtyMatch"
+                                       [class.chip-qty-mismatch]="sku.sapBatches.length > 0 && pb.match && !pb.qtyMatch"
+                                       [class.chip-mismatched]="sku.sapBatches.length > 0 && !pb.match">
+                                    <span class="chip-batch-code">{{ pb.batch }}</span>
+                                    @if (pb.qty) {
+                                      <span class="chip-qty">({{ pb.qty }} {{ pb.unit || (sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง') }})</span>
+                                    }
+                                  </div>
+                                }
+                              }
+                            </div>
+                          </td>
+                          <td class="col-sap-batch">
+                            @if (sku.sapBatches.length > 0) {
+                              <div class="sap-batch-list">
+                                @for (sb of sku.sapBatches; track $index) {
+                                  <div class="sap-batch-item">
+                                    <span class="code-text font-bold"
+                                          [class.text-emerald]="sb.match && sb.qtyMatch"
+                                          [class.text-amber]="sb.match && !sb.qtyMatch"
+                                          [class.text-rose]="!sb.match">
+                                      {{ sb.batch }}
+                                    </span>
+                                    @if (sb.qty) {
+                                      <span class="sap-batch-qty"
+                                            [class.text-amber]="sb.match && !sb.qtyMatch"
+                                            [class.text-rose]="!sb.match">
+                                        ({{ sb.qty }} {{ sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง' }})
+                                      </span>
+                                    }
+                                  </div>
+                                }
+                              </div>
+                            } @else {
+                              <span class="text-slate-400 italic">รอข้อมูล SAP</span>
+                            }
+                          </td>
+                          <td class="col-qty text-right font-bold text-dark">
+                            {{ sku.qty.toLocaleString() }}
+                            <span class="unit-badge" style="display: inline-block; margin-left: 4px; font-size: 0.72rem; padding: 1px 5px; border-radius: 4px; background: #f1f5f9; color: #475569; font-weight: 600;">
+                              {{ sku.deliveryQuantityUnit || 'CAR' }}
+                            </span>
+                          </td>
+                          <td class="col-status text-center">
+                            @if (sku.sapBatches.length === 0) {
+                              <span class="status-badge badge-pending">รอข้อมูล SAP</span>
+                            } @else if (sku.status === 'MATCH') {
+                              <span class="status-badge badge-match">ตรงตามแนะนำ</span>
+                            } @else if (sku.status === 'QTY_MISMATCH') {
+                              <span class="status-badge badge-qty-mismatch" title="ตรงตามแนะนำแต่จำนวนไม่ตรง">ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+                            } @else {
+                              <span class="status-badge badge-mismatch">เปลี่ยนล็อต</span>
+                            }
+                          </td>
+                          <td class="col-action text-center">
+                            <button type="button" 
+                                    class="btn-sku-more"
+                                    (click)="openSkuDetail(sku, soGroup.soNumber, doGroup.doNumber, doGroup.customer)"
+                                    title="ดูรายละเอียดข้อมูลทั้งหมด">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="5" r="2.2"/>
+                                <circle cx="12" cy="12" r="2.2"/>
+                                <circle cx="12" cy="19" r="2.2"/>
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-notice py-8">
+          @if (isLoading()) {
+            <div class="empty-title">กำลังดึงและประมวลผลข้อมูล...</div>
+            <div class="empty-sub">กรุณารอสักครู่ ระบบกำลังเชื่อมต่อและประมวลผลข้อมูล Batch ประจำวันที่เลือก</div>
+          } @else {
+            <div class="empty-title">ไม่พบข้อมูล Batch ที่ตรงกับเงื่อนไข</div>
+            <div class="empty-sub">ลองเปลี่ยนคำค้นหา หรือเลือกคำสั่งซื้อ (SO) อื่น</div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- SKU Detail Modal (สำหรับกดดูข้อมูลทั้งหมดจากจุดไข่ปลาบนจอเล็ก/แท็บเล็ต) -->
+  @if (selectedSkuDetail(); as active) {
+    <div class="sku-modal-backdrop" (click)="closeSkuDetail()">
+      <div class="sku-modal-dialog" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="sku-modal-header">
+          <div class="modal-title-group">
+            <div class="modal-meta-row">
+              <span class="modal-tag-order">SO: {{ active.soNumber }}</span>
+              <span class="modal-tag-do">DO: {{ active.doNumber }}</span>
+              @if (active.customer) {
+                <span class="modal-tag-cust" [title]="active.customer">{{ active.customer }}</span>
+              }
+            </div>
+            <h3 class="modal-title">รายละเอียดสินค้า & ข้อมูลล็อต</h3>
+          </div>
+          <button type="button" class="btn-modal-close" (click)="closeSkuDetail()" title="ปิดหน้าต่าง">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="sku-modal-body">
+          <!-- SKU Summary Card -->
+          <div class="modal-sku-card">
+            <div class="sku-card-main">
+              <div class="sku-code-row">
+                <span class="modal-sku-code">{{ active.sku.material }}</span>
+                @if (active.sku.item) {
+                  <span class="modal-sku-item">({{ active.sku.item }})</span>
+                }
+              </div>
+              <div class="modal-sku-desc">{{ active.sku.skuDescription }}</div>
+            </div>
+
+            <div class="sku-card-stats">
+              <div class="sku-stat-item">
+                <span class="stat-label">จำนวนทั้งหมด</span>
+                <span class="stat-val font-bold text-dark">
+                  {{ active.sku.qty.toLocaleString() }}
+                  <span class="unit-tag">{{ active.sku.deliveryQuantityUnit || 'CAR' }}</span>
+                </span>
+              </div>
+              <div class="sku-stat-item text-right">
+                <span class="stat-label">สถานะการตรวจสอบ</span>
+                <div class="status-wrap">
+                  @if (active.sku.sapBatches.length === 0) {
+                    <span class="status-badge badge-pending">รอข้อมูล SAP</span>
+                  } @else if (active.sku.status === 'MATCH') {
+                    <span class="status-badge badge-match">ตรงตามแนะนำ</span>
+                  } @else if (active.sku.status === 'QTY_MISMATCH') {
+                    <span class="status-badge badge-qty-mismatch">ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+                  } @else {
+                    <span class="status-badge badge-mismatch">เปลี่ยนล็อต</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Batch Comparison Section -->
+          <div class="modal-batches-section">
+            <h4 class="section-heading">เปรียบเทียบข้อมูลล็อต (Batch Breakdown)</h4>
+
+            <div class="modal-batches-grid">
+              <!-- Plan Batch Column -->
+              <div class="modal-batch-col col-plan">
+                <div class="col-head">
+                  <div class="head-left">
+                    <strong>Plan Batch ที่แนะนำ</strong>
+                  </div>
+                  <span class="head-count">({{ active.sku.planBatches.length }} รายการ)</span>
+                </div>
+
+                <div class="batch-chips-list">
+                  @for (pb of active.sku.planBatches; track $index) {
+                    @if (pb.isNoPlan) {
+                      <div class="modal-batch-chip chip-no-plan">
+                        <span class="chip-code text-slate-500">ไม่ได้ plant ไว้</span>
+                        @if (pb.qty) {
+                          <span class="chip-qty">({{ pb.qty }} {{ pb.unit || (active.sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง') }})</span>
+                        }
+                      </div>
+                    } @else {
+                      <div class="modal-batch-chip"
+                           [class.chip-matched]="active.sku.sapBatches.length > 0 && pb.match && pb.qtyMatch"
+                           [class.chip-qty-mismatch]="active.sku.sapBatches.length > 0 && pb.match && !pb.qtyMatch"
+                           [class.chip-mismatched]="active.sku.sapBatches.length > 0 && !pb.match">
+                        <span class="chip-code">{{ pb.batch }}</span>
+                        @if (pb.qty) {
+                          <span class="chip-qty">({{ pb.qty }} {{ pb.unit || (active.sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง') }})</span>
+                        }
+                      </div>
+                    }
+                  }
+                </div>
+              </div>
+
+              <!-- SAP Batch Column -->
+              <div class="modal-batch-col col-sap">
+                <div class="col-head">
+                  <div class="head-left">
+                    <strong>ล็อตที่ใช้ (SAP)</strong>
+                  </div>
+                  <span class="head-count">({{ active.sku.sapBatches.length }} รายการ)</span>
+                </div>
+
+                <div class="batch-chips-list">
+                  @if (active.sku.sapBatches.length > 0) {
+                    @for (sb of active.sku.sapBatches; track $index) {
+                      <div class="modal-batch-chip"
+                           [class.chip-matched]="sb.match && sb.qtyMatch"
+                           [class.chip-qty-mismatch]="sb.match && !sb.qtyMatch"
+                           [class.chip-mismatched]="!sb.match">
+                        <span class="chip-code">{{ sb.batch }}</span>
+                        @if (sb.qty) {
+                          <span class="chip-qty">({{ sb.qty }} {{ active.sku.deliveryQuantityUnit === 'PAC' ? 'แพ็ค' : 'ลัง' }})</span>
+                        }
+                      </div>
+                    }
+                  } @else {
+                    <div class="modal-empty-notice">
+                      <span class="italic text-slate-400">ยังไม่มีข้อมูลล็อตจาก SAP</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="sku-modal-footer">
+          <button type="button" class="btn-modal-dismiss" (click)="closeSkuDetail()">
+            ปิดหน้าต่าง
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

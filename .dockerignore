@@ -1,0 +1,15 @@
+node_modules
+backend/node_modules
+.angular
+.vscode
+.git
+*.xlsx
+backend/data/exports/*.xlsx
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+npm-debug.log
+yarn-error.log
+.env
+backend/.env
+!.env.example
+!backend/.env.example

@@ -1,0 +1,3299 @@
+[
+  [
+    {
+      "DO": "1410284511",
+      "SO": "1310280164",
+      "ITEM": "000020",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607280001",
+          "QTY": "20"
+        }
+      ],
+      "province": "พระนครศรีอยุธยา",
+      "trip_number": "BKKCT-120926-024",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "1410284511",
+      "ReferenceSDDocument": "1310280164",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "พระนครศรีอยุธยา",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "2607280001",
+      "batchPlan": "2607280001",
+      "vrfyBatch": "2607280001",
+      "match": true
+    },
+    {
+      "DO": "1410284544",
+      "SO": "1310280328",
+      "ITEM": "000020",
+      "Material": "T02011401000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "2"
+        }
+      ],
+      "province": "กรุงเทพมหานคร",
+      "trip_number": "BKKCT-120926-035",
+      "sku_descriptions": "แซบไมค์ น้ำปลาร้าสูตรส้มตำ330ml.แพ็ค 6",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "1410284544",
+      "ReferenceSDDocument": "1310280328",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "กรุงเทพมหานคร",
+      "sapMaterial": "T02011401000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284547",
+      "SO": "1310280326",
+      "ITEM": "000020",
+      "Material": "T02011401000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "1"
+        }
+      ],
+      "province": "กรุงเทพมหานคร",
+      "trip_number": "BKKCT-120926-036",
+      "sku_descriptions": "แซบไมค์ น้ำปลาร้าสูตรส้มตำ330ml.แพ็ค 6",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "1410284547",
+      "ReferenceSDDocument": "1310280326",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "กรุงเทพมหานคร",
+      "sapMaterial": "T02011401000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284548",
+      "SO": "1310280347",
+      "ITEM": "000010",
+      "Material": "T02011401000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "1"
+        }
+      ],
+      "province": "กรุงเทพมหานคร",
+      "trip_number": "BKKCT-120926-036",
+      "sku_descriptions": "แซบไมค์ น้ำปลาร้าสูตรส้มตำ330ml.แพ็ค 6",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "1410284548",
+      "ReferenceSDDocument": "1310280347",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "กรุงเทพมหานคร",
+      "sapMaterial": "T02011401000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000010",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607280001",
+          "QTY": "35"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 35,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "35",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607280001",
+      "batchPlan": "2607280001",
+      "vrfyBatch": "2607280001",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000020",
+      "Material": "F01011302000",
+      "FirstBatch": [
+        {
+          "Batch": "2606090001",
+          "QTY": "3"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ชาวเกาะ กะทิอบควันเทียน36x250ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011302000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "2606090001",
+      "batchPlan": "2606090001",
+      "vrfyBatch": "2606090001",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000060",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "25"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.",
+      "TripHeader": 200,
+      "qty": 25,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "25",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000060",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000070",
+      "Material": "F01011902000",
+      "FirstBatch": [
+        {
+          "Batch": "2606090001",
+          "QTY": "7"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ชาวเกาะ กะทิอบควันเทียน12x1000ml.",
+      "TripHeader": 200,
+      "qty": 7,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "7",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011902000",
+      "ReferenceSDDocumentItem": "000070",
+      "Batch": "2606090001",
+      "batchPlan": "2606090001",
+      "vrfyBatch": "2606090001",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000090",
+      "Material": "F03031902000",
+      "FirstBatch": [
+        {
+          "Batch": "260701",
+          "QTY": "1"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "คิงส์ไอแลนด์ วุ้นมะพร้าวกลิ่นสละ12x1kg.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F03031902000",
+      "ReferenceSDDocumentItem": "000090",
+      "Batch": "260701",
+      "batchPlan": "260701",
+      "vrfyBatch": "260701",
+      "match": true
+    },
+    {
+      "DO": "1410284554",
+      "SO": "1310280242",
+      "ITEM": "000110",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "5"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "1410284554",
+      "ReferenceSDDocument": "1310280242",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000110",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    },
+    {
+      "DO": "1410284555",
+      "SO": "1310280323",
+      "ITEM": "000010",
+      "Material": "T47013401000",
+      "FirstBatch": [
+        {
+          "Batch": "260623",
+          "QTY": "2"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "ไมค์ แซ่บม่วน น้ำปลาร้าปรุงสุก 24x380ml",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "1410284555",
+      "ReferenceSDDocument": "1310280323",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "T47013401000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "260623",
+      "batchPlan": "260623",
+      "vrfyBatch": "260623",
+      "match": true
+    },
+    {
+      "DO": "1410284555",
+      "SO": "1310280323",
+      "ITEM": "000020",
+      "Material": "T02011401000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "2"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-038",
+      "sku_descriptions": "แซบไมค์ น้ำปลาร้าสูตรส้มตำ330ml.แพ็ค 6",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "1410284555",
+      "ReferenceSDDocument": "1310280323",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "T02011401000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284560",
+      "SO": "1310280198",
+      "ITEM": "000010",
+      "Material": "T02011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "100"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-041",
+      "sku_descriptions": "แซ่บไมค์ น้ำปลาร้าปรุงสุกส้มตำ24x330ml.",
+      "TripHeader": 200,
+      "qty": 100,
+      "Vbeln": "1410284560",
+      "ReferenceSDDocument": "1310280198",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "100",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T02011501000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284561",
+      "SO": "1310280324",
+      "ITEM": "000020",
+      "Material": "T02011401000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-041",
+      "sku_descriptions": "แซบไมค์ น้ำปลาร้าสูตรส้มตำ330ml.แพ็ค 6",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "1410284561",
+      "ReferenceSDDocument": "1310280324",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T02011401000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "1410284563",
+      "SO": "1310280307",
+      "ITEM": "000010",
+      "Material": "F04011201000",
+      "FirstBatch": [
+        {
+          "Batch": "2607160001",
+          "QTY": "1"
+        }
+      ],
+      "province": "กรุงเทพมหานคร",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วีฟิท นมข้าวยาคู36x200ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "1410284563",
+      "ReferenceSDDocument": "1310280307",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "กรุงเทพมหานคร",
+      "sapMaterial": "F04011201000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607160001",
+      "batchPlan": "2607160001",
+      "vrfyBatch": "2607160001",
+      "match": true
+    },
+    {
+      "DO": "1410284568",
+      "SO": "1310280214",
+      "ITEM": "000030",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607280001",
+          "QTY": "3"
+        }
+      ],
+      "province": "สมุทรปราการ",
+      "trip_number": "BKKCT-120926-044",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "1410284568",
+      "ReferenceSDDocument": "1310280214",
+      "DistributionChannel": "20",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สมุทรปราการ",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2607280001",
+      "batchPlan": "2607280001",
+      "vrfyBatch": "2607280001",
+      "match": true
+    },
+    {
+      "DO": "1410284586",
+      "SO": "1310280232",
+      "ITEM": "000020",
+      "Material": "T47013401000",
+      "FirstBatch": [
+        {
+          "Batch": "260623",
+          "QTY": "6"
+        }
+      ],
+      "province": "น่าน",
+      "trip_number": "NOU-120926-086",
+      "sku_descriptions": "ไมค์ แซ่บม่วน น้ำปลาร้าปรุงสุก 24x380ml",
+      "TripHeader": 200,
+      "qty": 6,
+      "Vbeln": "1410284586",
+      "ReferenceSDDocument": "1310280232",
+      "DistributionChannel": "31",
+      "ActualDeliveryQuantity": "6",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "น่าน",
+      "sapMaterial": "T47013401000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "260623",
+      "batchPlan": "260623",
+      "vrfyBatch": "260623",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000010",
+      "Material": "F01010301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607140001",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ80x65ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01010301000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607140001",
+      "batchPlan": "2607140001",
+      "vrfyBatch": "2607140001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000020",
+      "Material": "F01010901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607220001",
+          "QTY": "20"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x150ml.",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01010901000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "2607220001",
+      "batchPlan": "2607220001",
+      "vrfyBatch": "2607220001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000030",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "15"
+        },
+        {
+          "Batch": "2607270001",
+          "QTY": "55"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 55,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "55",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2607270001",
+      "batchPlan": "2607270001",
+      "vrfyBatch": "2607270001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000030",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "15"
+        },
+        {
+          "Batch": "2607270001",
+          "QTY": "55"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 15,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "15",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000040",
+      "Material": "F01011301030",
+      "FirstBatch": [
+        {
+          "Batch": "2608100001",
+          "QTY": "25"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิขวด36x250ml.",
+      "TripHeader": 200,
+      "qty": 25,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "25",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011301030",
+      "ReferenceSDDocumentItem": "000040",
+      "Batch": "2608100001",
+      "batchPlan": "2608100001",
+      "vrfyBatch": "2608100001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000050",
+      "Material": "F01011701000",
+      "FirstBatch": [
+        {
+          "Batch": "2605300001",
+          "QTY": "50"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ24x500ml.",
+      "TripHeader": 200,
+      "qty": 50,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "50",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011701000",
+      "ReferenceSDDocumentItem": "000050",
+      "Batch": "2605300001",
+      "batchPlan": "2605300001",
+      "vrfyBatch": "2605300001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000060",
+      "Material": "F01011701025",
+      "FirstBatch": [
+        {
+          "Batch": "2608110001",
+          "QTY": "15"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิขวด 24x500 ml.",
+      "TripHeader": 200,
+      "qty": 15,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "15",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011701025",
+      "ReferenceSDDocumentItem": "000060",
+      "Batch": "2608110001",
+      "batchPlan": "2608110001",
+      "vrfyBatch": "2608110001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000070",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "30"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.",
+      "TripHeader": 200,
+      "qty": 30,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "30",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000070",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000080",
+      "Material": "F01011901002",
+      "FirstBatch": [
+        {
+          "Batch": "2608180001",
+          "QTY": "10"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.GEMINA.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01011901002",
+      "ReferenceSDDocumentItem": "000080",
+      "Batch": "2608180001",
+      "batchPlan": "2608180001",
+      "vrfyBatch": "2608180001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000090",
+      "Material": "F01061301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607140001",
+          "QTY": "10"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ น้ำมะพร้าวขวด 36x250ml.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01061301000",
+      "ReferenceSDDocumentItem": "000090",
+      "Batch": "2607140001",
+      "batchPlan": "2607140001",
+      "vrfyBatch": "2607140001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000100",
+      "Material": "F01061901000",
+      "FirstBatch": [
+        {
+          "Batch": "2608270001",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ชาวเกาะ น้ำมะพร้าวขวด 12x1000ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F01061901000",
+      "ReferenceSDDocumentItem": "000100",
+      "Batch": "2608270001",
+      "batchPlan": "2608270001",
+      "vrfyBatch": "2608270001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000110",
+      "Material": "F04031301000",
+      "FirstBatch": [
+        {
+          "Batch": "2608040001",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วีฟิท นมข้าวกล้องงอก7ชนิด36x250ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F04031301000",
+      "ReferenceSDDocumentItem": "000110",
+      "Batch": "2608040001",
+      "batchPlan": "2608040001",
+      "vrfyBatch": "2608040001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000120",
+      "Material": "F04041301000",
+      "FirstBatch": [
+        {
+          "Batch": "2608260001",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วีฟิท นมข้าวกล้องผสมงาดำ36x250ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F04041301000",
+      "ReferenceSDDocumentItem": "000120",
+      "Batch": "2608260001",
+      "batchPlan": "2608260001",
+      "vrfyBatch": "2608260001",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000160",
+      "Material": "F41063504000",
+      "FirstBatch": [
+        {
+          "Batch": "260717",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "LM DFเนื้อวัวไก่แซลมอนผักเยลลี่ 70gx12x4",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F41063504000",
+      "ReferenceSDDocumentItem": "000160",
+      "Batch": "260717",
+      "batchPlan": "260717",
+      "vrfyBatch": "260717",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000170",
+      "Material": "F41063504001",
+      "FirstBatch": [
+        {
+          "Batch": "260310",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "LM CF ไก่หน้าปลาทูในเยลลี่ 70gx12x4",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F41063504001",
+      "ReferenceSDDocumentItem": "000170",
+      "Batch": "260310",
+      "batchPlan": "260310",
+      "vrfyBatch": "260310",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000200",
+      "Material": "F41063507000",
+      "FirstBatch": [
+        {
+          "Batch": "260502",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "LM CF ปลาทูน่ามูสรสนมแพะ 70gx12x4",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "F41063507000",
+      "ReferenceSDDocumentItem": "000200",
+      "Batch": "260502",
+      "batchPlan": "260502",
+      "vrfyBatch": "260502",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000220",
+      "Material": "T02011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "50"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "แซ่บไมค์ น้ำปลาร้าปรุงสุกส้มตำ24x330ml.",
+      "TripHeader": 200,
+      "qty": 50,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "50",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T02011501000",
+      "ReferenceSDDocumentItem": "000220",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000230",
+      "Material": "T02033701000",
+      "FirstBatch": [
+        {
+          "Batch": "260717",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "แซ่บไมค์ น้ำจิ้มสุกี้พริกเกาหลี24x400ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T02033701000",
+      "ReferenceSDDocumentItem": "000230",
+      "Batch": "260717",
+      "batchPlan": "260717",
+      "vrfyBatch": "260717",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000240",
+      "Material": "T02041701000",
+      "FirstBatch": [
+        {
+          "Batch": "260723",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "แซ่บไมค์ น้ำมะขามเปียกเข้มข้น 24x400ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T02041701000",
+      "ReferenceSDDocumentItem": "000240",
+      "Batch": "260723",
+      "batchPlan": "260723",
+      "vrfyBatch": "260723",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000250",
+      "Material": "T09012601000",
+      "FirstBatch": [
+        {
+          "Batch": "260813",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วุ้นเส้นแห้ง ต้นน้ำ 35g (1x25x10)",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T09012601000",
+      "ReferenceSDDocumentItem": "000250",
+      "Batch": "260813",
+      "batchPlan": "260813",
+      "vrfyBatch": "260813",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000260",
+      "Material": "T09012701000",
+      "FirstBatch": [
+        {
+          "Batch": "260813",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วุ้นเส้นแห้ง ต้นน้ำ 70g (1x12x10)",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T09012701000",
+      "ReferenceSDDocumentItem": "000260",
+      "Batch": "260813",
+      "batchPlan": "260813",
+      "vrfyBatch": "260813",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000270",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260902",
+          "QTY": "30"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 30,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "30",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000270",
+      "Batch": "260902",
+      "batchPlan": "260902",
+      "vrfyBatch": "260902",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000280",
+      "Material": "T09022801000",
+      "FirstBatch": [
+        {
+          "Batch": "260904",
+          "QTY": "20"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด 500g. (1x3x10)",
+      "TripHeader": 200,
+      "qty": 60,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "60",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T09022801000",
+      "ReferenceSDDocumentItem": "000280",
+      "Batch": "260903",
+      "batchPlan": "260904",
+      "vrfyBatch": "260903",
+      "match": false
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000280",
+      "Material": "T09022801000",
+      "FirstBatch": [
+        {
+          "Batch": "260904",
+          "QTY": "20"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด 500g. (1x3x10)",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T09022801000",
+      "ReferenceSDDocumentItem": "000280",
+      "Batch": "260904",
+      "batchPlan": "260904",
+      "vrfyBatch": "260904",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000290",
+      "Material": "T14010101000",
+      "FirstBatch": [
+        {
+          "Batch": "260831",
+          "QTY": "5"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ซูโม่ คุ้กกี้ไส้ครีม (28G x 12 x 12)",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T14010101000",
+      "ReferenceSDDocumentItem": "000290",
+      "Batch": "260831",
+      "batchPlan": "260831",
+      "vrfyBatch": "260831",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000300",
+      "Material": "T42012601000",
+      "FirstBatch": [
+        {
+          "Batch": "260813",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ปราชญา พริกไทยดำ 500x7g.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T42012601000",
+      "ReferenceSDDocumentItem": "000300",
+      "Batch": "260813",
+      "batchPlan": "260813",
+      "vrfyBatch": "260813",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000310",
+      "Material": "T42012702000",
+      "FirstBatch": [
+        {
+          "Batch": "260807",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ปราชญา พริกไทยขาว 500x5g.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T42012702000",
+      "ReferenceSDDocumentItem": "000310",
+      "Batch": "260807",
+      "batchPlan": "260807",
+      "vrfyBatch": "260807",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000320",
+      "Material": "T42012704000",
+      "FirstBatch": [
+        {
+          "Batch": "260213",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ปราชญา ผงกะหรี่ 500x5g.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T42012704000",
+      "ReferenceSDDocumentItem": "000320",
+      "Batch": "260213",
+      "batchPlan": "260213",
+      "vrfyBatch": "260213",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000330",
+      "Material": "T43012201000",
+      "FirstBatch": [
+        {
+          "Batch": "260713",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "KameKame เจลลี่ รสสตรอเบอร์รี่ 48x320ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T43012201000",
+      "ReferenceSDDocumentItem": "000330",
+      "Batch": "260713",
+      "batchPlan": "260713",
+      "vrfyBatch": "260713",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000340",
+      "Material": "T43012202000",
+      "FirstBatch": [
+        {
+          "Batch": "260804",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "KameKame เจลลี่ รสองุ่น 48x320ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T43012202000",
+      "ReferenceSDDocumentItem": "000340",
+      "Batch": "260804",
+      "batchPlan": "260804",
+      "vrfyBatch": "260804",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000350",
+      "Material": "T44012801000",
+      "FirstBatch": [
+        {
+          "Batch": "260722",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "หยกสยาม ปลาซาร์ดีนซอสมะเขือเทศ 100x145g",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T44012801000",
+      "ReferenceSDDocumentItem": "000350",
+      "Batch": "260722",
+      "batchPlan": "260722",
+      "vrfyBatch": "260722",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000360",
+      "Material": "T45012401001",
+      "FirstBatch": [
+        {
+          "Batch": "260828",
+          "QTY": "10"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "หน่อไม้ น้ำปลาผสม 12x700ml.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T45012401001",
+      "ReferenceSDDocumentItem": "000360",
+      "Batch": "260828",
+      "batchPlan": "260828",
+      "vrfyBatch": "260828",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000370",
+      "Material": "T45013401001",
+      "FirstBatch": [
+        {
+          "Batch": "260826",
+          "QTY": "5"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "หน่อไม้ น้ำปลาผสม 12x300ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T45013401001",
+      "ReferenceSDDocumentItem": "000370",
+      "Batch": "260826",
+      "batchPlan": "260826",
+      "vrfyBatch": "260826",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000380",
+      "Material": "T47013401000",
+      "FirstBatch": [
+        {
+          "Batch": "260623",
+          "QTY": "20"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "ไมค์ แซ่บม่วน น้ำปลาร้าปรุงสุก 24x380ml",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T47013401000",
+      "ReferenceSDDocumentItem": "000380",
+      "Batch": "260623",
+      "batchPlan": "260623",
+      "vrfyBatch": "260623",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000390",
+      "Material": "T52012201000",
+      "FirstBatch": [
+        {
+          "Batch": "260811",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "คุมะ เจลลี่จุ๊บลิ้นจี่ 48x320 ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T52012201000",
+      "ReferenceSDDocumentItem": "000390",
+      "Batch": "260811",
+      "batchPlan": "260811",
+      "vrfyBatch": "260811",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000400",
+      "Material": "T52012205000",
+      "FirstBatch": [
+        {
+          "Batch": "260829",
+          "QTY": "2"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "คุมะ เจลลี่จุ๊บโคล่า 48x320ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T52012205000",
+      "ReferenceSDDocumentItem": "000400",
+      "Batch": "260829",
+      "batchPlan": "260829",
+      "vrfyBatch": "260829",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000410",
+      "Material": "T53014801000",
+      "FirstBatch": [
+        {
+          "Batch": "260822",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "MAG MAG บ๊วยคืนชีพ 144x20 G.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T53014801000",
+      "ReferenceSDDocumentItem": "000410",
+      "Batch": "260822",
+      "batchPlan": "260822",
+      "vrfyBatch": "260822",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000420",
+      "Material": "T53052201000",
+      "FirstBatch": [
+        {
+          "Batch": "260810",
+          "QTY": "30"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "MAG MAG บ๊วยคืนซ่ากลิ่นบ๊วยโซดา 12x320ml",
+      "TripHeader": 200,
+      "qty": 30,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "30",
+      "DeliveryQuantityUnit": "PAC",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T53052201000",
+      "ReferenceSDDocumentItem": "000420",
+      "Batch": "260810",
+      "batchPlan": "260810",
+      "vrfyBatch": "260810",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000430",
+      "Material": "T59011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260813",
+          "QTY": "20"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "อีฟ น้ำเก๊กฮวย 24x350ml.",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T59011501000",
+      "ReferenceSDDocumentItem": "000430",
+      "Batch": "260813",
+      "batchPlan": "260813",
+      "vrfyBatch": "260813",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000440",
+      "Material": "T60015502000",
+      "FirstBatch": [
+        {
+          "Batch": "260628",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วิตอะเดย์ น้ำวิตามินไครแซนเทมั่ม24x470ml",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T60015502000",
+      "ReferenceSDDocumentItem": "000440",
+      "Batch": "260628",
+      "batchPlan": "260628",
+      "vrfyBatch": "260628",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000450",
+      "Material": "T60015503000",
+      "FirstBatch": [
+        {
+          "Batch": "260804",
+          "QTY": "3"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "วิตอะเดย์ น้ำวิตามินซีกลิ่นพีช 24x470ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T60015503000",
+      "ReferenceSDDocumentItem": "000450",
+      "Batch": "260804",
+      "batchPlan": "260804",
+      "vrfyBatch": "260804",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000460",
+      "Material": "T63013501000",
+      "FirstBatch": [
+        {
+          "Batch": "260901",
+          "QTY": "1"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "เชฟโปร ผงปรุงรสอาหารสูตรเข้มข้น 80x75G.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T63013501000",
+      "ReferenceSDDocumentItem": "000460",
+      "Batch": "260901",
+      "batchPlan": "260901",
+      "vrfyBatch": "260901",
+      "match": true
+    },
+    {
+      "DO": "80603094",
+      "SO": "4200049188",
+      "ITEM": "000480",
+      "Material": "T69012201000",
+      "FirstBatch": [
+        {
+          "Batch": "260815",
+          "QTY": "19"
+        }
+      ],
+      "province": "ระยอง",
+      "trip_number": "BKKCT-120926-025",
+      "sku_descriptions": "บ้านแพ้ว น้ำตาลสด 24x320ml.",
+      "TripHeader": 200,
+      "qty": 19,
+      "Vbeln": "80603094",
+      "ReferenceSDDocument": "4200049188",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "19",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ระยอง",
+      "sapMaterial": "T69012201000",
+      "ReferenceSDDocumentItem": "000480",
+      "Batch": "260815",
+      "batchPlan": "260815",
+      "vrfyBatch": "260815",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000020",
+      "Material": "F01011304000",
+      "FirstBatch": [
+        {
+          "Batch": "2608040001",
+          "QTY": "3"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิหัวกะทิ  36x250ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011304000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "2608040001",
+      "batchPlan": "2608040001",
+      "vrfyBatch": "2608040001",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000030",
+      "Material": "F01011901002",
+      "FirstBatch": [
+        {
+          "Batch": "2608180001",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.GEMINA.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011901002",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2608180001",
+      "batchPlan": "2608180001",
+      "vrfyBatch": "2608180001",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000040",
+      "Material": "F01011902000",
+      "FirstBatch": [
+        {
+          "Batch": "2606090001",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิอบควันเทียน12x1000ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011902000",
+      "ReferenceSDDocumentItem": "000040",
+      "Batch": "2606090001",
+      "batchPlan": "2606090001",
+      "vrfyBatch": "2606090001",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000080",
+      "Material": "T06012401001",
+      "FirstBatch": [
+        {
+          "Batch": "260815",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "โยคุน้ำผลไม้ ผสมวุ้นรสเมล่อน 48x300ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T06012401001",
+      "ReferenceSDDocumentItem": "000080",
+      "Batch": "260815",
+      "batchPlan": "260815",
+      "vrfyBatch": "260815",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000130",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260902",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000130",
+      "Batch": "260902",
+      "batchPlan": "260902",
+      "vrfyBatch": "260902",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000140",
+      "Material": "T09021901000",
+      "FirstBatch": [
+        {
+          "Batch": "260829",
+          "QTY": "1"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด 12x1000g.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T09021901000",
+      "ReferenceSDDocumentItem": "000140",
+      "Batch": "260826",
+      "batchPlan": "260829",
+      "vrfyBatch": "260826",
+      "match": false
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000140",
+      "Material": "T09021901000",
+      "FirstBatch": [
+        {
+          "Batch": "260829",
+          "QTY": "1"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด 12x1000g.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T09021901000",
+      "ReferenceSDDocumentItem": "000140",
+      "Batch": "260828",
+      "batchPlan": "260829",
+      "vrfyBatch": "260828",
+      "match": false
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000140",
+      "Material": "T09021901000",
+      "FirstBatch": [
+        {
+          "Batch": "260829",
+          "QTY": "1"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด 12x1000g.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T09021901000",
+      "ReferenceSDDocumentItem": "000140",
+      "Batch": "260829",
+      "batchPlan": "260829",
+      "vrfyBatch": "260829",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000170",
+      "Material": "T11011901000",
+      "FirstBatch": [
+        {
+          "Batch": "260611",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "เอ็มทีบายแม่ตุ๊ก น้ำมะนาว12x1000ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T11011901000",
+      "ReferenceSDDocumentItem": "000170",
+      "Batch": "260611",
+      "batchPlan": "260611",
+      "vrfyBatch": "260611",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000190",
+      "Material": "T11041201000",
+      "FirstBatch": [
+        {
+          "Batch": "260718",
+          "QTY": "2"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "เอ็มทีบายแม่ตุ๊ก กระเทียมดองถ้วย72x200g.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T11041201000",
+      "ReferenceSDDocumentItem": "000190",
+      "Batch": "260718",
+      "batchPlan": "260718",
+      "vrfyBatch": "260718",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000200",
+      "Material": "T11043301000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "เอ็มทีบายแม่ตุ๊ก กระเทียมดองขวด24x850ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T11043301000",
+      "ReferenceSDDocumentItem": "000200",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000210",
+      "Material": "T13013801000",
+      "FirstBatch": [
+        {
+          "Batch": "260824",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "วอยซ์ แครกเกอร์ช็อกโกแลต (24Gx12x12)",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T13013801000",
+      "ReferenceSDDocumentItem": "000210",
+      "Batch": "260824",
+      "batchPlan": "260824",
+      "vrfyBatch": "260824",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000220",
+      "Material": "T13023901000",
+      "FirstBatch": [
+        {
+          "Batch": "260817",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "วอยซ์ วาฟเฟิลช็อคโกมอลค่า (21Gx12x12)",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T13023901000",
+      "ReferenceSDDocumentItem": "000220",
+      "Batch": "260817",
+      "batchPlan": "260817",
+      "vrfyBatch": "260817",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000250",
+      "Material": "T28014901000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "3"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "แดซอง สาหร่ายม้วน รสดั้งเดิม 288x5g.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T28014901000",
+      "ReferenceSDDocumentItem": "000250",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000290",
+      "Material": "T47014102000",
+      "FirstBatch": [
+        {
+          "Batch": "260803",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "เลิฟลี่บอย น้ำหวานครีมโซดา 12x750ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T47014102000",
+      "ReferenceSDDocumentItem": "000290",
+      "Batch": "260803",
+      "batchPlan": "260803",
+      "vrfyBatch": "260803",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000300",
+      "Material": "T47014103000",
+      "FirstBatch": [
+        {
+          "Batch": "260803",
+          "QTY": "2"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "เลิฟลี่บอย น้ำหวานน้ำผึ้งมะนาว 12x750ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T47014103000",
+      "ReferenceSDDocumentItem": "000300",
+      "Batch": "260803",
+      "batchPlan": "260803",
+      "vrfyBatch": "260803",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000320",
+      "Material": "T51011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260907",
+          "QTY": "20"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ซันนี่ ฮันนี่ น้ำผึ้งมะนาว 12x350ml.",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "PAC",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T51011501000",
+      "ReferenceSDDocumentItem": "000320",
+      "Batch": "260907",
+      "batchPlan": "260907",
+      "vrfyBatch": "260907",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000350",
+      "Material": "T52012204000",
+      "FirstBatch": [
+        {
+          "Batch": "260706",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "คุมะ เจลลี่จุ๊บรสส้ม 48x320ml.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T52012204000",
+      "ReferenceSDDocumentItem": "000350",
+      "Batch": "260706",
+      "batchPlan": "260706",
+      "vrfyBatch": "260706",
+      "match": true
+    },
+    {
+      "DO": "80603095",
+      "SO": "4200049170",
+      "ITEM": "000360",
+      "Material": "T55015101000",
+      "FirstBatch": [
+        {
+          "Batch": "260803",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ไทนี่โอ มินิคุกกี้ไส้ครีม (28GX12X12)",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603095",
+      "ReferenceSDDocument": "4200049170",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T55015101000",
+      "ReferenceSDDocumentItem": "000360",
+      "Batch": "260803",
+      "batchPlan": "260803",
+      "vrfyBatch": "260803",
+      "match": true
+    },
+    {
+      "DO": "80603096",
+      "SO": "4200049182",
+      "ITEM": "000020",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607280001",
+          "QTY": "30"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 30,
+      "Vbeln": "80603096",
+      "ReferenceSDDocument": "4200049182",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "30",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000020",
+      "Batch": "2607280001",
+      "batchPlan": "2607280001",
+      "vrfyBatch": "2607280001",
+      "match": true
+    },
+    {
+      "DO": "80603096",
+      "SO": "4200049182",
+      "ITEM": "000060",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607090001",
+          "QTY": "29"
+        },
+        {
+          "Batch": "2607080001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.",
+      "TripHeader": 200,
+      "qty": 29,
+      "Vbeln": "80603096",
+      "ReferenceSDDocument": "4200049182",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "29",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000060",
+      "Batch": "2607090001",
+      "batchPlan": "2607090001",
+      "vrfyBatch": "2607090001",
+      "match": true
+    },
+    {
+      "DO": "80603096",
+      "SO": "4200049182",
+      "ITEM": "000060",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607090001",
+          "QTY": "29"
+        },
+        {
+          "Batch": "2607080001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ชาวเกาะ กะทิ12x1000ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603096",
+      "ReferenceSDDocument": "4200049182",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000060",
+      "Batch": "2607080001",
+      "batchPlan": "2607080001",
+      "vrfyBatch": "2607080001",
+      "match": true
+    },
+    {
+      "DO": "80603096",
+      "SO": "4200049182",
+      "ITEM": "000090",
+      "Material": "F03031902000",
+      "FirstBatch": [
+        {
+          "Batch": "260701",
+          "QTY": "5"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "คิงส์ไอแลนด์ วุ้นมะพร้าวกลิ่นสละ12x1kg.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603096",
+      "ReferenceSDDocument": "4200049182",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "F03031902000",
+      "ReferenceSDDocumentItem": "000090",
+      "Batch": "260701",
+      "batchPlan": "260701",
+      "vrfyBatch": "260701",
+      "match": true
+    },
+    {
+      "DO": "80603096",
+      "SO": "4200049182",
+      "ITEM": "000110",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260902",
+          "QTY": "10"
+        }
+      ],
+      "province": "ปทุมธานี",
+      "trip_number": "BKKCT-120926-028",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603096",
+      "ReferenceSDDocument": "4200049182",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ปทุมธานี",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000110",
+      "Batch": "260902",
+      "batchPlan": "260902",
+      "vrfyBatch": "260902",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000010",
+      "Material": "F01010301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607140001",
+          "QTY": "2"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "ชาวเกาะ กะทิ80x65ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F01010301000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607140001",
+      "batchPlan": "2607140001",
+      "vrfyBatch": "2607140001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000030",
+      "Material": "F01011302000",
+      "FirstBatch": [
+        {
+          "Batch": "2606090001",
+          "QTY": "3"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "ชาวเกาะ กะทิอบควันเทียน36x250ml.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F01011302000",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2606090001",
+      "batchPlan": "2606090001",
+      "vrfyBatch": "2606090001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000040",
+      "Material": "F01011304000",
+      "FirstBatch": [
+        {
+          "Batch": "2608040001",
+          "QTY": "2"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "ชาวเกาะ กะทิหัวกะทิ  36x250ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F01011304000",
+      "ReferenceSDDocumentItem": "000040",
+      "Batch": "2608040001",
+      "batchPlan": "2608040001",
+      "vrfyBatch": "2608040001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000070",
+      "Material": "F03031902000",
+      "FirstBatch": [
+        {
+          "Batch": "260701",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "คิงส์ไอแลนด์ วุ้นมะพร้าวกลิ่นสละ12x1kg.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F03031902000",
+      "ReferenceSDDocumentItem": "000070",
+      "Batch": "260701",
+      "batchPlan": "260701",
+      "vrfyBatch": "260701",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000080",
+      "Material": "F04031301000",
+      "FirstBatch": [
+        {
+          "Batch": "2608040001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วีฟิท นมข้าวกล้องงอก7ชนิด36x250ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F04031301000",
+      "ReferenceSDDocumentItem": "000080",
+      "Batch": "2608040001",
+      "batchPlan": "2608040001",
+      "vrfyBatch": "2608040001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000090",
+      "Material": "F04041301000",
+      "FirstBatch": [
+        {
+          "Batch": "2608260001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วีฟิท นมข้าวกล้องผสมงาดำ36x250ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F04041301000",
+      "ReferenceSDDocumentItem": "000090",
+      "Batch": "2608260001",
+      "batchPlan": "2608260001",
+      "vrfyBatch": "2608260001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000100",
+      "Material": "F04051301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607240001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วีฟิท ธัญญาหาร 5 ชนิด36x250ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F04051301000",
+      "ReferenceSDDocumentItem": "000100",
+      "Batch": "2607240001",
+      "batchPlan": "2607240001",
+      "vrfyBatch": "2607240001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000110",
+      "Material": "F04061301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607210001",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วีฟิท น้ำนมข้าวกล้องไรซเบอรี36x250ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "F04061301000",
+      "ReferenceSDDocumentItem": "000110",
+      "Batch": "2607210001",
+      "batchPlan": "2607210001",
+      "vrfyBatch": "2607210001",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000140",
+      "Material": "T09012701000",
+      "FirstBatch": [
+        {
+          "Batch": "260813",
+          "QTY": "2"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วุ้นเส้นแห้ง ต้นน้ำ 70g (1x12x10)",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T09012701000",
+      "ReferenceSDDocumentItem": "000140",
+      "Batch": "260813",
+      "batchPlan": "260813",
+      "vrfyBatch": "260813",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000150",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260902",
+          "QTY": "10"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000150",
+      "Batch": "260902",
+      "batchPlan": "260902",
+      "vrfyBatch": "260902",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000190",
+      "Material": "T11043301000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "5"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "เอ็มทีบายแม่ตุ๊ก กระเทียมดองขวด24x850ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T11043301000",
+      "ReferenceSDDocumentItem": "000190",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000260",
+      "Material": "T60016304000",
+      "FirstBatch": [
+        {
+          "Batch": "260810",
+          "QTY": "6"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วิตอะเดย์ น้ำองุ่นเคียวโฮC1000 24x480ml.",
+      "TripHeader": 200,
+      "qty": 6,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "6",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T60016304000",
+      "ReferenceSDDocumentItem": "000260",
+      "Batch": "260810",
+      "batchPlan": "260810",
+      "vrfyBatch": "260810",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000270",
+      "Material": "T60016305000",
+      "FirstBatch": [
+        {
+          "Batch": "260711",
+          "QTY": "5"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วิตอะเดย์ น้ำฮันนี่เลม่อนC1000 24x480ml.",
+      "TripHeader": 200,
+      "qty": 5,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "5",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T60016305000",
+      "ReferenceSDDocumentItem": "000270",
+      "Batch": "260711",
+      "batchPlan": "260711",
+      "vrfyBatch": "260711",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000280",
+      "Material": "T61010902000",
+      "FirstBatch": [
+        {
+          "Batch": "260525",
+          "QTY": "2"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "วิตอะเดย์ วิตามินซีกลิ่นส้ม 30x150ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T61010902000",
+      "ReferenceSDDocumentItem": "000280",
+      "Batch": "260525",
+      "batchPlan": "260525",
+      "vrfyBatch": "260525",
+      "match": true
+    },
+    {
+      "DO": "80603099",
+      "SO": "4200049187",
+      "ITEM": "000290",
+      "Material": "T63013501000",
+      "FirstBatch": [
+        {
+          "Batch": "260901",
+          "QTY": "1"
+        }
+      ],
+      "province": "ชลบุรี",
+      "trip_number": "BKKCT-120926-042",
+      "sku_descriptions": "เชฟโปร ผงปรุงรสอาหารสูตรเข้มข้น 80x75G.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603099",
+      "ReferenceSDDocument": "4200049187",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "ชลบุรี",
+      "sapMaterial": "T63013501000",
+      "ReferenceSDDocumentItem": "000290",
+      "Batch": "260901",
+      "batchPlan": "260901",
+      "vrfyBatch": "260901",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000010",
+      "Material": "F01011301000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "20"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "ชาวเกาะ กะทิ36x250ml.Autopack",
+      "TripHeader": 200,
+      "qty": 20,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "20",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "F01011301000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000030",
+      "Material": "F01011304000",
+      "FirstBatch": [
+        {
+          "Batch": "2608040001",
+          "QTY": "1"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "ชาวเกาะ กะทิหัวกะทิ  36x250ml.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "F01011304000",
+      "ReferenceSDDocumentItem": "000030",
+      "Batch": "2608040001",
+      "batchPlan": "2608040001",
+      "vrfyBatch": "2608040001",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000080",
+      "Material": "T02011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260814",
+          "QTY": "10"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "แซ่บไมค์ น้ำปลาร้าปรุงสุกส้มตำ24x330ml.",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T02011501000",
+      "ReferenceSDDocumentItem": "000080",
+      "Batch": "260814",
+      "batchPlan": "260814",
+      "vrfyBatch": "260814",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000170",
+      "Material": "T45013401001",
+      "FirstBatch": [
+        {
+          "Batch": "260826",
+          "QTY": "2"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "หน่อไม้ น้ำปลาผสม 12x300ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T45013401001",
+      "ReferenceSDDocumentItem": "000170",
+      "Batch": "260826",
+      "batchPlan": "260826",
+      "vrfyBatch": "260826",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000180",
+      "Material": "T47013401000",
+      "FirstBatch": [
+        {
+          "Batch": "260623",
+          "QTY": "10"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "ไมค์ แซ่บม่วน น้ำปลาร้าปรุงสุก 24x380ml",
+      "TripHeader": 200,
+      "qty": 10,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "10",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T47013401000",
+      "ReferenceSDDocumentItem": "000180",
+      "Batch": "260623",
+      "batchPlan": "260623",
+      "vrfyBatch": "260623",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000190",
+      "Material": "T51011501000",
+      "FirstBatch": [
+        {
+          "Batch": "260907",
+          "QTY": "60"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "ซันนี่ ฮันนี่ น้ำผึ้งมะนาว 12x350ml.",
+      "TripHeader": 200,
+      "qty": 60,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "60",
+      "DeliveryQuantityUnit": "PAC",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T51011501000",
+      "ReferenceSDDocumentItem": "000190",
+      "Batch": "260907",
+      "batchPlan": "260907",
+      "vrfyBatch": "260907",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000220",
+      "Material": "T52012205000",
+      "FirstBatch": [
+        {
+          "Batch": "260829",
+          "QTY": "2"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "คุมะ เจลลี่จุ๊บโคล่า 48x320ml.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T52012205000",
+      "ReferenceSDDocumentItem": "000220",
+      "Batch": "260829",
+      "batchPlan": "260829",
+      "vrfyBatch": "260829",
+      "match": true
+    },
+    {
+      "DO": "80603100",
+      "SO": "4200049189",
+      "ITEM": "000260",
+      "Material": "T63013501000",
+      "FirstBatch": [
+        {
+          "Batch": "260901",
+          "QTY": "1"
+        }
+      ],
+      "province": "สิงห์บุรี",
+      "trip_number": "BKKCT-120926-043",
+      "sku_descriptions": "เชฟโปร ผงปรุงรสอาหารสูตรเข้มข้น 80x75G.",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603100",
+      "ReferenceSDDocument": "4200049189",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "สิงห์บุรี",
+      "sapMaterial": "T63013501000",
+      "ReferenceSDDocumentItem": "000260",
+      "Batch": "260901",
+      "batchPlan": "260901",
+      "vrfyBatch": "260901",
+      "match": true
+    },
+    {
+      "DO": "80603106",
+      "SO": "4200049168",
+      "ITEM": "000360",
+      "Material": "T49014301000",
+      "FirstBatch": [
+        {
+          "Batch": "260713",
+          "QTY": "3"
+        }
+      ],
+      "province": "เชียงใหม่",
+      "trip_number": "NOU-120926-085",
+      "sku_descriptions": "อัน-ปัน แครกเกอร์ไส้ช็อกโกแลต 144x25g.",
+      "TripHeader": 200,
+      "qty": 3,
+      "Vbeln": "80603106",
+      "ReferenceSDDocument": "4200049168",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "3",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "เชียงใหม่",
+      "sapMaterial": "T49014301000",
+      "ReferenceSDDocumentItem": "000360",
+      "Batch": "260713",
+      "batchPlan": "260713",
+      "vrfyBatch": "260713",
+      "match": true
+    },
+    {
+      "DO": "80603106",
+      "SO": "4200049168",
+      "ITEM": "000360",
+      "Material": "T49014301000",
+      "FirstBatch": [
+        {
+          "Batch": "260713",
+          "QTY": "3"
+        }
+      ],
+      "province": "เชียงใหม่",
+      "trip_number": "NOU-120926-085",
+      "sku_descriptions": "อัน-ปัน แครกเกอร์ไส้ช็อกโกแลต 144x25g.",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603106",
+      "ReferenceSDDocument": "4200049168",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "เชียงใหม่",
+      "sapMaterial": "T49014301000",
+      "ReferenceSDDocumentItem": "000360",
+      "Batch": "260803",
+      "batchPlan": "260713",
+      "vrfyBatch": "260803",
+      "match": false
+    },
+    {
+      "DO": "80603106",
+      "SO": "4200049168",
+      "ITEM": "000540",
+      "Material": "T74013902000",
+      "FirstBatch": [
+        {
+          "Batch": "251127",
+          "QTY": "1"
+        }
+      ],
+      "province": "เชียงใหม่",
+      "trip_number": "NOU-120926-085",
+      "sku_descriptions": "ลาลาฟาร์ม นมอัดเม็ด รสดาร์กช็อกโกแลต 15g",
+      "TripHeader": 200,
+      "qty": 1,
+      "Vbeln": "80603106",
+      "ReferenceSDDocument": "4200049168",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "1",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "เชียงใหม่",
+      "sapMaterial": "T74013902000",
+      "ReferenceSDDocumentItem": "000540",
+      "Batch": "251127",
+      "batchPlan": "251127",
+      "vrfyBatch": "251127",
+      "match": true
+    },
+    {
+      "DO": "80603109",
+      "SO": "4200049155",
+      "ITEM": "000120",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260828",
+          "QTY": "2"
+        }
+      ],
+      "province": "นครศรีธรรมราช",
+      "trip_number": "SO-120926-691",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 2,
+      "Vbeln": "80603109",
+      "ReferenceSDDocument": "4200049155",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "2",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000120",
+      "Batch": "260828",
+      "batchPlan": "260828",
+      "vrfyBatch": "260828",
+      "match": true
+    },
+    {
+      "DO": "80603109",
+      "SO": "4200049155",
+      "ITEM": "000120",
+      "Material": "T09021201000",
+      "FirstBatch": [
+        {
+          "Batch": "260828",
+          "QTY": "2"
+        }
+      ],
+      "province": "นครศรีธรรมราช",
+      "trip_number": "SO-120926-691",
+      "sku_descriptions": "ต้นน้ำ วุ้นเส้นสด200g.(1x3x25)",
+      "TripHeader": 200,
+      "qty": 28,
+      "Vbeln": "80603109",
+      "ReferenceSDDocument": "4200049155",
+      "DistributionChannel": "99",
+      "ActualDeliveryQuantity": "28",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "",
+      "sapMaterial": "T09021201000",
+      "ReferenceSDDocumentItem": "000120",
+      "Batch": "260829",
+      "batchPlan": "260828",
+      "vrfyBatch": "260829",
+      "match": false
+    }
+  ],
+  [
+    {
+      "DO": "1410284659",
+      "SO": "1310280199",
+      "ITEM": "000010",
+      "Material": "F01011901000",
+      "FirstBatch": [
+        {
+          "Batch": "2607130001",
+          "QTY": "100"
+        }
+      ],
+      "province": "นครปฐม",
+      "trip_number": "OUT_DHL",
+      "sku_descriptions": "F01011901000",
+      "TripHeader": "",
+      "qty": 100,
+      "Vbeln": "1410284659",
+      "ReferenceSDDocument": "1310280199",
+      "DistributionChannel": "10",
+      "ActualDeliveryQuantity": "100",
+      "DeliveryQuantityUnit": "CAR",
+      "RegionName": "นครปฐม",
+      "sapMaterial": "F01011901000",
+      "ReferenceSDDocumentItem": "000010",
+      "Batch": "2607130001",
+      "batchPlan": "2607130001",
+      "vrfyBatch": "2607130001",
+      "match": true
+    }
+  ]
+]
