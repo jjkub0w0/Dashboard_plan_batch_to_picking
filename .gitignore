@@ -59,3 +59,6 @@ backend/.env.*
 !.env.example
 !**/.env.example
 !backend/.env.example
+
+# Document & Diagram build scripts
+/scripts/

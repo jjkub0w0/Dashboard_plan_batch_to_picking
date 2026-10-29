@@ -656,6 +656,7 @@ export class SyncService {
             Batch: vrfyBatch,
             ShipToParty: cleanString(sap.ShipToParty),
             ShipToFullName: cleanString(sap.ShipToFullName),
+            StorageLocation: cleanString(sap.StorageLocation),
 
             batchPlan: planBatch,
             vrfyBatch,
@@ -693,6 +694,9 @@ export class SyncService {
           sapMaterial: fill.Material,
           ReferenceSDDocumentItem: fill.ITEM,
           Batch: '',
+          ShipToParty: '',
+          ShipToFullName: '',
+          StorageLocation: '',
 
           batchPlan: planBatch,
           vrfyBatch: '',
@@ -760,6 +764,7 @@ export class SyncService {
             Batch: vrfyBatch,
             ShipToParty: cleanString(sap.ShipToParty),
             ShipToFullName: cleanString(sap.ShipToFullName),
+            StorageLocation: cleanString(sap.StorageLocation),
 
             batchPlan: planBatch,
             vrfyBatch,

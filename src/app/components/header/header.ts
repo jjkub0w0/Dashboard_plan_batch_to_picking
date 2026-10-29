@@ -23,14 +23,11 @@ interface CalendarDay {
       <div class="header-container">
         <!-- Left Side: Brand Logo & Home Navigation -->
         <div class="left-section">
-          <a routerLink="/" (click)="onNavDashboard()" class="brand-link">
-            <div class="brand-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
-                <path d="m3.3 7 8.7 5 8.7-5"/>
-                <path d="M12 22V12"/>
-              </svg>
+          <a routerLink="/" (click)="onNavDashboard()" class="brand-link" title="กลับหน้าหลัก Dashboard">
+            <div class="brand-logo-wrap">
+              <img src="logo.png" alt="APF Group" class="brand-logo" />
             </div>
+            <div class="brand-divider"></div>
             <div class="brand-info">
               <span class="brand-title">Plan Batch to Picking</span>
               <span class="brand-sub">Dashboard</span>
@@ -327,22 +324,35 @@ interface CalendarDay {
     .brand-link {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
       color: inherit;
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .brand-icon {
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+    .brand-logo-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      flex-shrink: 0;
+    }
+    .brand-logo {
+      height: 36px;
+      width: auto;
+      max-width: 120px;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+    }
+    .brand-link:hover .brand-logo {
+      transform: scale(1.03);
+      filter: drop-shadow(0 2px 6px rgba(16, 185, 129, 0.4));
+    }
+    .brand-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.25);
       flex-shrink: 0;
     }
     .brand-info {
@@ -916,6 +926,8 @@ interface CalendarDay {
     @media (max-width: 640px) {
       .header-container { padding: 0 0.75rem; }
       .brand-sub { display: none; }
+      .brand-divider { display: none; }
+      .brand-logo { height: 30px; }
       .right-section { gap: 6px; }
       .header-btn-sync { padding: 6px 8px; }
       .header-btn-sync span { display: none; }

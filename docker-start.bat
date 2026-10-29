@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 title Plan Batch to Picking [Docker]
 chcp 65001 >nul
 cd /d "%~dp0"
