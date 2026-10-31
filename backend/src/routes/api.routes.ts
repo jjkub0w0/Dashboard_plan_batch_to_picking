@@ -43,7 +43,7 @@ const dashboardController = new DashboardController(dataLoader, calculator);
 
 // CACHE-SYNC: a fresh snapshot from /sync OR the 30-min scheduler must invalidate the
 // controller's DataLoaderService cache, otherwise /dashboard keeps stale pre-sync rows.
-syncService.afterSnapshotWrite = (date) => dataLoader.clearCache(date);
+syncService.afterSnapshotWrite = (date: string) => dataLoader.clearCache(date);
 
 const router = Router();
 

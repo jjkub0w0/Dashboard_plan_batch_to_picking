@@ -60,7 +60,7 @@ function parseQty(val: any): number {
  * @param planWhenUnmatched  label to show when the picked batch is not planned
  * @param treatAsNoPlan      when true the line is "not planned" (match forced)
  */
-function resolveBatchPlan(params: {
+export function resolveBatchPlan(params: {
   firstBatchList: any[];
   matchedSapList: any[];
   vrfyBatch: string;
@@ -110,7 +110,31 @@ function resolveBatchPlan(params: {
     }
   }
 
-  if (isAllQtyMatch) {
+  // เคสพิเศษ: มี plan batch > 1 และมี plan batch == null อย่างน้อย 1 ตัว
+  // โดย batch ที่ดึงมาจาก fiori ตรงกับตัวอื่นในนั้นจนครบ และ qty ของแต่ละ batch ไม่น้อยกว่าที่ First batch กำหนด
+  const hasNoPlanEntry = firstBatchList.some((fb: any) => {
+    const b = cleanString(fb?.Batch);
+    return !b || b === '-' || !isPlannedBatchCode(b);
+  });
+  const totalPlanQty = firstBatchList.reduce((sum: number, fb: any) => sum + parseQty(fb.QTY), 0);
+  const totalSapQty = matchedSapList.reduce((sum: number, s: any) => sum + parseQty(s.ActualDeliveryQuantity), 0);
+  const isTotalQtyMatch = totalPlanQty > 0 ? totalPlanQty === totalSapQty : true;
+
+  const isSpecialNoPlanQtyMatch = hasNoPlanEntry &&
+    firstBatchList.length > 1 &&
+    plannedBatches.length > 0 &&
+    isTotalQtyMatch &&
+    plannedBatches.every((b: string) => {
+      const planQty = firstBatchList
+        .filter((fb: any) => cleanString(fb?.Batch) === b)
+        .reduce((sum: number, fb: any) => sum + parseQty(fb.QTY), 0);
+      const sapQty = matchedSapList
+        .filter((s: any) => cleanString(s.Batch) === b)
+        .reduce((sum: number, s: any) => sum + parseQty(s.ActualDeliveryQuantity), 0);
+      return sapQty >= planQty;
+    });
+
+  if (isAllQtyMatch || isSpecialNoPlanQtyMatch) {
     return { planBatch, isMatched: true, batchStatus: 'MATCH' };
   } else {
     return { planBatch, isMatched: false, batchStatus: 'QTY_MISMATCH' };
@@ -137,6 +161,7 @@ export interface PlanOutDhlItem {
   ITEM: string;
   Material: string;
   FirstBatch: Array<{ Batch: string; QTY: string | number }>;
+  sku_descriptions?: string;
   LatestBatch?: any[];
 }
 
@@ -164,9 +189,10 @@ export interface DataSnapshotItem {
   vrfyBatch: string;
   match: boolean;
   batchStatus?: 'MATCH' | 'QTY_MISMATCH' | 'MISMATCH' | 'PENDING';
-  ShipToParty?: string;
   ShipToFullName?: string;
+  ShipToParty?: string;
   StorageLocation?: string;
+  DeliveryDocumentItemText?: string;
 }
 
 export interface SyncProcessResult {
@@ -238,11 +264,7 @@ export interface SyncProcessResult {
 }
 
 export class SyncService {
-  // CACHE-SYNC: routes register this to clear DataLoaderService's per-date cache after
-  // a fresh snapshot lands; without it, /dashboard keeps serving stale pre-sync rows
-  // until the user happens to press force (excel-export already clears its own).
   public afterSnapshotWrite?: (date: string) => void;
-
   private calculator = new CalculationService();
 
   /**
@@ -357,10 +379,7 @@ export class SyncService {
           log.warn(`[CACHE INVALID] ไฟล์แคช ${snapshotPath} เป็นไฟล์ว่างเปล่า (0 รายการ) -> ลบแคชและดึงข้อมูลใหม่จากภายนอก`);
           try { await fsp.unlink(snapshotPath); } catch {}
         } else {
-          log.info(`\n================================================================================`);
-          log.info(`[CACHE HIT] ตรวจพบไฟล์ .json ประจำวันที่: "${cleanDate}" (${path.basename(snapshotPath)})`);
-          log.info(`ใช้งานข้อมูลจากไฟล์แคชทันที ไม่ต้องเชื่อมต่อภายนอก (S3 / MSSQL / SAP)`);
-          log.info(`================================================================================\n`);
+          log.info(`[CACHE HIT] ตรวจพบไฟล์ .json ประจำวันที่: "${cleanDate}" (${path.basename(snapshotPath)}) — ใช้งานข้อมูลจากไฟล์แคชทันที`);
 
           const rawItems = this.snapshotToRawItems(data_snapshot);
 
@@ -407,14 +426,12 @@ export class SyncService {
       }
     }
 
-    log.info(`\n================================================================================`);
     log.info(`[DATA PIPELINE 5 STEPS] เริ่มกระบวนการดึงและประมวลผลข้อมูลใหม่ประจำวันที่: "${cleanDate}" (force=${force})`);
-    log.info(`================================================================================`);
 
     // -------------------------------------------------------------------------
     // 1. ดึงข้อมูล API S3 ตามวันที่เลือกในหน้าปฎิทิน -> เก็บในตัวแปร plan_batch (In-Memory เท่านั้น ไม่บันทึกเป็นไฟล์)
     // -------------------------------------------------------------------------
-    log.info(`\n[ขั้นตอนที่ 1] ดึงข้อมูล AWS S3 (BatchDO) ตามวันที่เลือก: ${cleanDate}`);
+    log.info(`[ขั้นตอนที่ 1] ดึงข้อมูล AWS S3 (BatchDO) ตามวันที่เลือก: ${cleanDate}`);
     log.info(`   รูปแบบการจัดเก็บ: จัดเก็บในตัวแปร plan_batch (ใน RAM) ไม่มีการบันทึกไฟล์ .json ในขั้นตอนนี้`);
     const s3Url = s3ApiService.getSnapshotUrl(cleanDate);
     log.info(`   - S3 URL: ${s3Url}`);
@@ -436,7 +453,8 @@ export class SyncService {
     // -------------------------------------------------------------------------
     // 2. ดึงข้อมูล MS SQL ตามที่ set ไว้ -> เก็บใน mssql_data
     // -------------------------------------------------------------------------
-    log.info(`\n[ขั้นตอนที่ 2] ดึงข้อมูล MS SQL Server (tms_dhl_planning) ประจำวันที่: ${cleanDate}`);
+    log.info(`[ขั้นตอนที่ 2] ดึงข้อมูล MS SQL Server (tms_dhl_planning) ประจำวันที่: ${cleanDate}`);
+    // log.info(`   - Query: SELECT order_no,sales_order,sku,sku_descriptions,loading_datetime,province,qty,TripHeader,trip_number FROM tms_dhl_planning WHERE loading_datetime = '${cleanDate}' AND delivery_type = 'Delivery'`);
 
     let mssql_data: TmsPlanningItem[] = [];
     let mssqlSuccess = false;
@@ -456,7 +474,7 @@ export class SyncService {
     //    เงื่อนไข: SO(s3) == sales_order(mssql) && DO(s3) == order_no(mssql) && Material(s3) == sku(mssql)
     //    สร้างตัวแปรใหม่ ชื่อ data_fillDB เก็บ DO SO ITEM Material FirstBatch(Batch,QTY) province trip_number
     // -------------------------------------------------------------------------
-    log.info(`\n[ขั้นตอนที่ 3] ตรวจสอบเงื่อนไข: SO(s3) == sales_order(mssql) && DO(s3) == order_no(mssql) && Material(s3) == sku(mssql)`);
+    log.info(`[ขั้นตอนที่ 3] ตรวจสอบเงื่อนไข: SO(s3) == sales_order(mssql) && DO(s3) == order_no(mssql) && Material(s3) == sku(mssql)`);
     // SQL-BLIP-GUARD: when MS SQL failed but S3 HAS rows, every S3 row falls into
     // plan_out_DHL below (sqlIndex is empty) - saving that as the day snapshot would
     // permanently misclassify all TMS orders as Non-TMS (cache-hit serves it forever).
@@ -535,7 +553,7 @@ export class SyncService {
       }
     } else if (mssql_data.length > 0) {
       // กรณี S3 ไม่มีไฟล์หรือไม่สามารถเข้าถึงได้ ให้ใช้ข้อมูลจาก MS SQL เป็นฐานหลักสำหรับ DHL
-      log.info(`   [FALLBACK TO MSSQL] S3 ไม่มีข้อมูลประจำวันที่ ${cleanDate} -> ดำเนินการใช้ข้อมูลจาก MS SQL (${mssql_data.length} แถว) เป็นฐาน`);
+      log.info(`[FALLBACK TO MSSQL] S3 ไม่มีข้อมูลประจำวันที่ ${cleanDate} -> ดำเนินการใช้ข้อมูลจาก MS SQL (${mssql_data.length} แถว) เป็นฐาน`);
       for (const sql of mssql_data) {
         const sqlDo = cleanString(sql.order_no);
         const sqlSo = cleanString(sql.sales_order);
@@ -562,17 +580,17 @@ export class SyncService {
     const uniqueDOs = Array.from(new Set(data_fillDB.map(d => d.DO).filter(Boolean)));
     const uniqueOutDhlDOs = Array.from(new Set(plan_out_DHL.map(d => d.DO).filter(Boolean)));
 
-    log.info(`   [OK] data_fillDB (DHL): กรองและสร้างตัวแปรสำเร็จ ${data_fillDB.length} รายการ (พบ ${uniqueDOs.length} DOs ที่ตรงกัน)`);
-    log.info(`   plan_out_DHL (ขั้นตอนที่ 3.5): ไม่พบใน TMS DB ${plan_out_DHL.length} รายการ (พบ ${uniqueOutDhlDOs.length} DOs ข้อมูลนอกเหนือจากระบบ TMS)`);
+    log.info(`[OK] data_fillDB (DHL): กรองและสร้างตัวแปรสำเร็จ ${data_fillDB.length} รายการ (พบ ${uniqueDOs.length} DOs ที่ตรงกัน)`);
+    log.info(`plan_out_DHL (ขั้นตอนที่ 3.5): ไม่พบใน TMS DB ${plan_out_DHL.length} รายการ (พบ ${uniqueOutDhlDOs.length} DOs ข้อมูลนอกเหนือจากระบบ TMS)`);
     if (uniqueOutDhlDOs.length > 0) {
-      log.info(`      • ตัวอย่าง OUT_DHL DOs: ${uniqueOutDhlDOs.slice(0, 5).join(', ')}`);
+      log.info(`   • ตัวอย่าง OUT_DHL DOs: ${uniqueOutDhlDOs.slice(0, 5).join(', ')}`);
     }
 
     // -------------------------------------------------------------------------
     // 4. เชื่อมต่อ SAP Fiori OData ตาม Vbeln = DO (ทั้งจาก data_fillDB และ plan_out_DHL)
     // -------------------------------------------------------------------------
     const allUniqueDOs = Array.from(new Set([...uniqueDOs, ...uniqueOutDhlDOs]));
-    log.info(`\n[ขั้นตอนที่ 4] เชื่อมต่อ SAP Fiori OData ตาม Vbeln = DO (รวม ${allUniqueDOs.length} DOs: TMS ${uniqueDOs.length} + Non-TMS ${uniqueOutDhlDOs.length})`);
+    log.info(`[ขั้นตอนที่ 4] เชื่อมต่อ SAP Fiori OData ตาม Vbeln = DO (รวม ${allUniqueDOs.length} DOs: TMS ${uniqueDOs.length} + Non-TMS ${uniqueOutDhlDOs.length})`);
     let sapdata: SapItem[] = [];
     let sapSuccess = false;
     let sapError: string | undefined;
@@ -581,24 +599,22 @@ export class SyncService {
 
     if (targetDOs.length > 0) {
       try {
-        // FIX: was hardcoded 2, which silently overrode CONCURRENCY in .env
-        // (sap-api only used config.sap.concurrency as a fallback). Default stays 2.
-        sapdata = await fetchSapDataByVbeln(targetDOs, cleanDate, config.sap.concurrency);
+        sapdata = await fetchSapDataByVbeln(targetDOs, cleanDate, 2);
         sapSuccess = true;
-        log.info(`   [OK] sapdata: จัดเก็บข้อมูลที่ตัดซ้ำแล้วสำเร็จ ${sapdata.length} รายการ (จาก ${targetDOs.length} DOs)`);
+        log.info(`[OK] sapdata: จัดเก็บข้อมูลที่ตัดซ้ำแล้วสำเร็จ ${sapdata.length} รายการ (จาก ${targetDOs.length} DOs)`);
       } catch (err: any) {
         sapError = err.message;
-        log.error(`   [ERROR] sapdata: เกิดข้อผิดพลาดในการดึง SAP Fiori:`, err.message);
+        log.error(`[ERROR] sapdata: เกิดข้อผิดพลาดในการดึง SAP Fiori: ${err.message}`);
       }
     } else {
-      log.info(`   sapdata: ไม่มีรายการ DO จาก data_fillDB หรือ plan_out_DHL จึงข้ามการดึง SAP`);
+      log.info(`sapdata: ไม่มีรายการ DO จาก data_fillDB หรือ plan_out_DHL จึงข้ามการดึง SAP`);
     }
 
     // -------------------------------------------------------------------------
     // 5. ตรวจสอบเงื่อนไข: DO == Vbeln && Material == sapdata.Material && ITEM == ReferenceSDDocumentItem
     //    สร้าง data_snapshot (TMS) และ OUT_DHL (ข้อมูลนอกเหนือจากระบบ TMS)
     // -------------------------------------------------------------------------
-    log.info(`\n[ขั้นตอนที่ 5] ตรวจสอบเงื่อนไข -> สร้าง data_snapshot (TMS) และ OUT_DHL (ข้อมูลนอกเหนือจากระบบ TMS)`);
+    log.info(`[ขั้นตอนที่ 5] ตรวจสอบเงื่อนไข -> สร้าง data_snapshot (TMS) และ OUT_DHL (ข้อมูลนอกเหนือจากระบบ TMS)`);
     let data_snapshot: DataSnapshotItem[] = [];
     let OUT_DHL: DataSnapshotItem[] = [];
 
@@ -613,7 +629,7 @@ export class SyncService {
       if (matchedSapList.length > 0) {
         for (const sap of matchedSapList) {
           const firstBatchList = Array.isArray(fill.FirstBatch) ? fill.FirstBatch : [];
-          const isFirstBatchEmpty = firstBatchList.length > 0 && firstBatchList.every((fb: any) => !fb.Batch || cleanString(fb.Batch) === '' || cleanString(fb.Batch) === NO_PLAN_BATCH_LEGACY);
+          const isFirstBatchEmpty = firstBatchList.length > 0 && firstBatchList.every((fb: any) => !fb.Batch || cleanString(fb.Batch) === '');
           const hasNoFirstBatch = firstBatchList.length === 0;
           const vrfyBatch = cleanString(sap.Batch);
 
@@ -639,7 +655,7 @@ export class SyncService {
             FirstBatch: fill.FirstBatch,
             province: fill.province,
             trip_number: fill.trip_number,
-            sku_descriptions: fill.sku_descriptions,
+            sku_descriptions: cleanString(sap.DeliveryDocumentItemText) || fill.sku_descriptions,
             TripHeader: fill.TripHeader,
             qty: (sap.ActualDeliveryQuantity !== undefined && sap.ActualDeliveryQuantity !== null && String(sap.ActualDeliveryQuantity).trim() !== '')
               ? parseQty(sap.ActualDeliveryQuantity)
@@ -654,14 +670,15 @@ export class SyncService {
             sapMaterial: cleanString(sap.Material),
             ReferenceSDDocumentItem: cleanString(sap.ReferenceSDDocumentItem),
             Batch: vrfyBatch,
-            ShipToParty: cleanString(sap.ShipToParty),
-            ShipToFullName: cleanString(sap.ShipToFullName),
-            StorageLocation: cleanString(sap.StorageLocation),
 
             batchPlan: planBatch,
             vrfyBatch,
             match: isMatched,
             batchStatus,
+            ShipToFullName: cleanString(sap.ShipToFullName),
+            ShipToParty: cleanString(sap.ShipToParty),
+            StorageLocation: cleanString(sap.StorageLocation),
+            DeliveryDocumentItemText: cleanString(sap.DeliveryDocumentItemText),
           });
         }
       } else {
@@ -694,14 +711,15 @@ export class SyncService {
           sapMaterial: fill.Material,
           ReferenceSDDocumentItem: fill.ITEM,
           Batch: '',
-          ShipToParty: '',
-          ShipToFullName: '',
-          StorageLocation: '',
 
           batchPlan: planBatch,
           vrfyBatch: '',
           match: false,
           batchStatus: 'PENDING',
+          ShipToFullName: '',
+          ShipToParty: '',
+          StorageLocation: '',
+          DeliveryDocumentItemText: '',
         });
       }
     }
@@ -717,7 +735,7 @@ export class SyncService {
       if (matchedSapList.length > 0) {
         for (const sap of matchedSapList) {
           const firstBatchList = Array.isArray(outItem.FirstBatch) ? outItem.FirstBatch : [];
-          const isFirstBatchEmpty = firstBatchList.length > 0 && firstBatchList.every((fb: any) => !fb.Batch || cleanString(fb.Batch) === '' || cleanString(fb.Batch) === NO_PLAN_BATCH_LEGACY);
+          const isFirstBatchEmpty = firstBatchList.length > 0 && firstBatchList.every((fb: any) => !fb.Batch || cleanString(fb.Batch) === '');
           const hasNoFirstBatch = firstBatchList.length === 0;
           const vrfyBatch = cleanString(sap.Batch);
 
@@ -737,12 +755,12 @@ export class SyncService {
           });
 
           const sapRegion = cleanString(sap.RegionName) || 'ข้อมูลนอกเหนือจากระบบ TMS';
-          const sapDesc = cleanString(sap.MaterialDesc || sap.Material || '');
+          const sapDesc = cleanString(sap.DeliveryDocumentItemText) || cleanString(sap.MaterialDesc) || cleanString(outItem.sku_descriptions) || cleanString(sap.Material) || '';
 
           OUT_DHL.push({
             DO: outItem.DO,
             SO: outItem.SO,
-            ITEM: outItem.ITEM,
+            ITEM: cleanString(sap.ReferenceSDDocumentItem || outItem.ITEM),
             Material: outItem.Material,
             FirstBatch: outItem.FirstBatch,
             province: sapRegion,
@@ -762,14 +780,15 @@ export class SyncService {
             sapMaterial: cleanString(sap.Material),
             ReferenceSDDocumentItem: cleanString(sap.ReferenceSDDocumentItem),
             Batch: vrfyBatch,
-            ShipToParty: cleanString(sap.ShipToParty),
-            ShipToFullName: cleanString(sap.ShipToFullName),
-            StorageLocation: cleanString(sap.StorageLocation),
 
             batchPlan: planBatch,
             vrfyBatch,
             match: isMatched,
             batchStatus,
+            ShipToFullName: cleanString(sap.ShipToFullName),
+            ShipToParty: cleanString(sap.ShipToParty),
+            StorageLocation: cleanString(sap.StorageLocation),
+            DeliveryDocumentItemText: cleanString(sap.DeliveryDocumentItemText),
           });
         }
       }
@@ -797,10 +816,7 @@ export class SyncService {
         }
 
         if (isDataChanged) {
-          // ATOMIC-WRITE: two pipelines for the same date can overlap (the inflight
-          // entry is dropped by the 15-min watchdog while the first run keeps going) -
-          // a torn half-written JSON would fail to parse on every later request.
-          // tmp+rename is atomic on one volume: readers only ever see complete files.
+          // ATOMIC-WRITE: tmp+rename is atomic on one volume: readers only ever see complete files.
           const tmpPath = `${snapshotPath}.tmp-${process.pid}-${Date.now()}`;
           await fsp.writeFile(tmpPath, newJson, 'utf8');
           try {
@@ -811,11 +827,11 @@ export class SyncService {
           }
           fileSize = (await fsp.stat(snapshotPath)).size;
           try { this.afterSnapshotWrite?.(cleanDate); } catch { /* hook must never break the pipeline */ }
-          log.info(`   [SAVE] จัดเก็บไฟล์ JSON เรียบร้อย (ข้อมูลเปลี่ยนแปลง): ${snapshotPath} (${(fileSize / 1024).toFixed(1)} KB)`);
+          log.info(`[SAVE] จัดเก็บไฟล์ JSON เรียบร้อย (ข้อมูลเปลี่ยนแปลง): ${snapshotPath} (${(fileSize / 1024).toFixed(1)} KB)`);
           trendService.clearCache();
         } else {
           fileSize = (await fsp.stat(snapshotPath)).size;
-          log.info(`   [UNCHANGED] ข้อมูลเหมือนเดิม ไม่มีการเปลี่ยนแปลง ข้ามการเขียนไฟล์ (${snapshotPath})`);
+          log.info(`[UNCHANGED] ข้อมูลเหมือนเดิม ไม่มีการเปลี่ยนแปลง ข้ามการเขียนไฟล์ (${snapshotPath})`);
         }
       } catch (writeErr: any) {
         snapshotSaveError = writeErr.message;
@@ -823,7 +839,7 @@ export class SyncService {
       }
     } else {
       isDataChanged = false;
-      log.info(`   ไม่มีข้อมูลสำหรับบันทึกไฟล์ snapshot (ข้ามการเขียนไฟล์ เพื่อไม่ให้เกิดแคชว่างเปล่า)`);
+      log.info(`ไม่มีข้อมูลสำหรับบันทึกไฟล์ snapshot (ข้ามการเขียนไฟล์ เพื่อไม่ให้เกิดแคชว่างเปล่า)`);
     }
 
     // บรอดแคสต์แจ้งเตือน Client ก็ต่อเมื่อมีข้อมูลและข้อมูลมีการเปลี่ยนแปลงจริงเท่านั้น
@@ -831,7 +847,6 @@ export class SyncService {
       eventsService.broadcastDataUpdate(cleanDate, isDataChanged);
     }
 
-    log.info(`\n================================================================================`);
     log.info(`[สรุปผลการทำงานครบทุกขั้นตอน ประจำวันที่ ${cleanDate}]:`);
     log.info(`   1. plan_batch      (S3)      : ${plan_batch.length} รายการ`);
     log.info(`   2. mssql_data      (MSSQL)   : ${mssql_data.length} แถว`);
@@ -840,7 +855,6 @@ export class SyncService {
     log.info(`   4. sapdata         (SAP)      : ${sapdata.length} รายการ (ตัดซ้ำแล้ว)`);
     log.info(`   5.1 data_snapshot  (Index 0)  : ${data_snapshot.length} รายการ (TMS)`);
     log.info(`   5.2 OUT_DHL        (Index 1)  : ${OUT_DHL.length} รายการ (ข้อมูลนอกเหนือจากระบบ TMS)`);
-    log.info(`================================================================================\n`);
 
     // -------------------------------------------------------------------------
     // คำนวณ Dashboard Metrics สำหรับส่งให้ Frontend แสดงผลแบบ Real-time
@@ -941,7 +955,7 @@ export class SyncService {
         sap: {
           connected: sapSuccess,
           totalItems: sapdata.length,
-          concurrency: config.sap.concurrency,
+          concurrency: 2,
         },
       },
       outDhl: {
@@ -1018,7 +1032,7 @@ export class SyncService {
             do: s.DO,
             customer: s.province,
             itemCode: s.Material,
-            stdDesc: s.sku_descriptions || '',
+            stdDesc: cleanString((s as any).DeliveryDocumentItemText) || cleanString(s.sku_descriptions) || '',
             batchPlan: planBatch,
             vrfyBatch: s.vrfyBatch,
             sapBatch: sapBatchStr,
@@ -1028,7 +1042,10 @@ export class SyncService {
             batchStatus,
             firstBatch: normalizedFirstBatch.length > 0 ? normalizedFirstBatch : (isNoPlan ? [{ Batch: NO_PLAN_BATCH, QTY: itemQty }] : []),
             firstBatchStr,
-            item: cleanString(s.ITEM || s.ReferenceSDDocumentItem || ''),
+            item: cleanString(s.ReferenceSDDocumentItem || s.ITEM || ''),
+            shipToFullName: cleanString(s.ShipToFullName),
+            shipToParty: cleanString(s.ShipToParty),
+            storageLocation: cleanString(s.StorageLocation || (s as any).storageLocation),
           };
     });
   }

@@ -364,7 +364,7 @@ export class DataLoaderService {
       );
       const customer = cleanString(r.customer || r.customer_name || r.province || r['ชื่อลูกค้า'] || '');
       const itemCode = cleanString(r.Material || r.sapMaterial || r.itemCode || r.item_code || r.sku || r['รหัสสินค้า'] || '');
-      const stdDesc = cleanString(r.sku_descriptions || r.stdDesc || r.std_desc || r.product_name || r['ชื่อรายการสินค้า'] || '');
+      const stdDesc = cleanString(r.DeliveryDocumentItemText || r.sku_descriptions || r.stdDesc || r.std_desc || r.product_name || r['ชื่อรายการสินค้า'] || '');
       const firstBatch = Array.isArray(r.FirstBatch) ? r.FirstBatch : (r.firstBatch || []);
       const isFirstBatchAllEmpty = firstBatch.length > 0 && firstBatch.every((fb: any) => !fb.Batch || cleanString(fb.Batch) === '' || cleanString(fb.Batch) === NO_PLAN_BATCH_LEGACY);
       const firstPlannedFb = firstBatch.find((fb: any) => {

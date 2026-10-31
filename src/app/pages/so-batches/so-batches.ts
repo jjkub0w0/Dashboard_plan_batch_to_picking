@@ -1,7 +1,8 @@
 import { Component, inject, signal, computed, effect, OnInit, DestroyRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DateFilterService } from '../../services/date-filter.service';
 import { getApiUrl } from '../../config/api.config';
 
@@ -97,6 +98,7 @@ export interface SoBatchDetailItem {
 @Component({
   selector: 'app-so-batches',
   standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './so-batches.html',
   styleUrl: './so-batches.scss',
 })
@@ -357,11 +359,30 @@ export class SoBatchesComponent implements OnInit {
           statusText = 'เปลี่ยนล็อต';
           isOverallMatch = false;
         } else {
+          const totalPlanQty = (hasExplicitNoPlan ? noPlanQty : 0) + Array.from(planBatchMap.values()).reduce((sum, pb) => sum + pb.qty, 0);
+          const isTotalQtyMatch = totalPlanQty > 0 ? totalPlanQty === totalSapQty : true;
+
+          // เคสพิเศษ: มี plan batch > 1 และมี plan batch == null อย่างน้อย 1 ตัว
+          // โดย batch ที่ดึงมาจาก fiori ตรงกับตัวอื่นในนั้นจนครบ และ qty ของแต่ละ batch ไม่น้อยกว่าที่ First batch กำหนด
+          const isSpecialNoPlanQtyMatch = hasExplicitNoPlan &&
+            planBatches.length > 1 &&
+            realPlanBatches.length > 0 &&
+            isBatchCodeMatch &&
+            isTotalQtyMatch &&
+            realPlanBatches.every(pb => {
+              const sapEntry = sapBatchMap.get(pb.batch);
+              return sapEntry && Number(sapEntry.qty) >= Number(pb.qty);
+            });
+
           const isAllQtyMatch = realPlanBatches.every(pb => pb.qtyMatch);
-          if (isAllQtyMatch) {
+          if (isAllQtyMatch || isSpecialNoPlanQtyMatch) {
             status = 'MATCH';
             statusText = 'ตรงตามแนะนำ';
             isOverallMatch = true;
+            if (isSpecialNoPlanQtyMatch) {
+              planBatches.forEach(pb => { pb.qtyMatch = true; });
+              sapBatches.forEach(sb => { sb.qtyMatch = true; });
+            }
           } else {
             status = 'QTY_MISMATCH';
             statusText = 'ตรงตามแนะนำแต่จำนวนไม่ตรง';

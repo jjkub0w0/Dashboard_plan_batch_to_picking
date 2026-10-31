@@ -1,7 +1,8 @@
 import { Component, inject, signal, computed, effect, OnInit, DestroyRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DateFilterService } from '../../services/date-filter.service';
 import { getApiUrl } from '../../config/api.config';
 
@@ -24,8 +25,8 @@ export function resolveOutDhlCategory(
   if (p === '1200' || sl.startsWith('RT')) {
     return { category: 'RETURN', label: 'การส่งคืน (Return)' };
   }
-  // 3. การจัดส่งนอกเหนือจากกลุ่มอื่น
-  return { category: 'OTHER', label: 'การจัดส่งนอกเหนือจากกลุ่มอื่น' };
+  // 3. การจัดส่งนอกเหนือจากระบบ TMS
+  return { category: 'OTHER', label: 'การจัดส่งนอกเหนือจากระบบ TMS' };
 }
 
 /**
@@ -150,6 +151,7 @@ export interface OutDhlDetailItem {
 @Component({
   selector: 'app-out-dhl',
   standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './out-dhl.html',
   styleUrl: './out-dhl.scss',
 })
@@ -161,6 +163,8 @@ export class OutDhlComponent implements OnInit {
 
   readonly isLoading = signal<boolean>(false);
   readonly isExporting = signal<boolean>(false);
+  readonly isFromCache = signal<boolean>(false);
+  readonly syncStatus = signal<any>(null);
 
   // Filters
   readonly selectedCategoryFilter = signal<OutDhlCategory>('ALL');
@@ -349,9 +353,6 @@ export class OutDhlComponent implements OnInit {
       if (!entry.shipToParty && it.shipToParty) entry.shipToParty = it.shipToParty;
       if (!entry.storageLocation && it.storageLocation) entry.storageLocation = it.storageLocation;
       if (it.storageLocation && it.storageLocation.trim().toUpperCase().startsWith('RT')) entry.storageLocation = it.storageLocation;
-      // ANY return row (ShipToParty 1200) makes the whole group RETURN, matching the
-      // backend excel-export anyReturn rule - first-non-empty alone mislabeled mixed SOs.
-      if (it.shipToParty && it.shipToParty.trim() === '1200') entry.shipToParty = it.shipToParty;
       entry.items.push(it);
     }
 
@@ -377,7 +378,7 @@ export class OutDhlComponent implements OnInit {
           for (const fb of fbs) {
             const b = (fb.Batch || '').trim();
             const q = Number(fb.QTY) || 0;
-            if (!b || b === 'ไม่ได้ plant ไว้ ' || b === 'ไม่ได้ plant ไว้') {
+            if (!b || b === '-' || b === 'ไม่ได้ plant ไว้ ' || b === 'ไม่ได้ plant ไว้') {
               hasExplicitNoPlan = true;
               noPlanQty += q;
             } else {
@@ -395,7 +396,7 @@ export class OutDhlComponent implements OnInit {
         } else if (it.batchPlan && it.batchPlan.trim()) {
           const b = it.batchPlan.trim();
           const q = Number(it.qty) || 0;
-          if (!b || b === 'ไม่ได้ plant ไว้ ' || b === 'ไม่ได้ plant ไว้') {
+          if (!b || b === '-' || b === 'ไม่ได้ plant ไว้ ' || b === 'ไม่ได้ plant ไว้') {
             hasExplicitNoPlan = true;
             noPlanQty += q;
           } else {
@@ -506,11 +507,30 @@ export class OutDhlComponent implements OnInit {
           statusText = 'เปลี่ยนล็อต';
           isOverallMatch = false;
         } else {
+          const totalPlanQty = (hasExplicitNoPlan ? noPlanQty : 0) + Array.from(planBatchMap.values()).reduce((sum, pb) => sum + pb.qty, 0);
+          const isTotalQtyMatch = totalPlanQty > 0 ? totalPlanQty === totalSapQty : true;
+
+          // เคสพิเศษ: มี plan batch > 1 และมี plan batch == null อย่างน้อย 1 ตัว
+          // โดย batch ที่ดึงมาจาก fiori ตรงกับตัวอื่นในนั้นจนครบ และ qty ของแต่ละ batch ไม่น้อยกว่าที่ First batch กำหนด
+          const isSpecialNoPlanQtyMatch = hasExplicitNoPlan &&
+            planBatches.length > 1 &&
+            realPlanBatches.length > 0 &&
+            isBatchCodeMatch &&
+            isTotalQtyMatch &&
+            realPlanBatches.every(pb => {
+              const sapEntry = sapBatchMap.get(pb.batch);
+              return sapEntry && Number(sapEntry.qty) >= Number(pb.qty);
+            });
+
           const isAllQtyMatch = realPlanBatches.every(pb => pb.qtyMatch);
-          if (isAllQtyMatch) {
+          if (isAllQtyMatch || isSpecialNoPlanQtyMatch) {
             status = 'MATCH';
             statusText = 'ตรงตามแนะนำ';
             isOverallMatch = true;
+            if (isSpecialNoPlanQtyMatch) {
+              planBatches.forEach(pb => { pb.qtyMatch = true; });
+              sapBatches.forEach(sb => { sb.qtyMatch = true; });
+            }
           } else {
             status = 'QTY_MISMATCH';
             statusText = 'ตรงตามแนะนำแต่จำนวนไม่ตรง';
@@ -594,9 +614,6 @@ export class OutDhlComponent implements OnInit {
       if (!entry.shipToParty && item.shipToParty) entry.shipToParty = item.shipToParty;
       if (!entry.storageLocation && item.storageLocation) entry.storageLocation = item.storageLocation;
       if (item.storageLocation && item.storageLocation.trim().toUpperCase().startsWith('RT')) entry.storageLocation = item.storageLocation;
-      // ANY return row (ShipToParty 1200) makes the whole group RETURN, matching the
-      // backend excel-export anyReturn rule - first-non-empty alone mislabeled mixed SOs.
-      if (item.shipToParty && item.shipToParty.trim() === '1200') entry.shipToParty = item.shipToParty;
       entry.qty += item.qty;
       entry.totalLines += 1;
       if (item.status === 'MATCH') entry.matchedLines += 1;
@@ -737,9 +754,6 @@ export class OutDhlComponent implements OnInit {
       if (!soEntry.shipToParty && item.shipToParty) soEntry.shipToParty = item.shipToParty;
       if (!soEntry.storageLocation && item.storageLocation) soEntry.storageLocation = item.storageLocation;
       if (item.storageLocation && item.storageLocation.trim().toUpperCase().startsWith('RT')) soEntry.storageLocation = item.storageLocation;
-      // ANY return row (ShipToParty 1200) makes the whole group RETURN, matching the
-      // backend excel-export anyReturn rule - first-non-empty alone mislabeled mixed SOs.
-      if (item.shipToParty && item.shipToParty.trim() === '1200') soEntry.shipToParty = item.shipToParty;
 
       if (!soEntry.doMap.has(doNum)) {
         soEntry.doMap.set(doNum, {
@@ -862,6 +876,8 @@ export class OutDhlComponent implements OnInit {
     if (this.currentDataDate !== cleanDate) {
       this.outDhlMetrics.set({ ...this.defaultMetrics });
       this.outDhlDetails.set([]);
+      this.syncStatus.set(null);
+      this.isFromCache.set(false);
     }
 
     this.loadOutDhlEndpoint(cleanDate);

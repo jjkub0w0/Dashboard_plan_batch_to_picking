@@ -113,6 +113,9 @@ export interface BatchSummary {
   status: 'COMPLETED' | 'IN_PROGRESS' | 'PLANNED';
   qtyByUnit?: Record<string, number>;
   batchDetails?: SoBatchDetailItem[];
+  shipToFullName?: string;
+  shipToParty?: string;
+  storageLocation?: string;
 }
 
 export interface OrderSummary {

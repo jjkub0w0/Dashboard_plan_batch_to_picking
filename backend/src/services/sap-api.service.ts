@@ -17,6 +17,7 @@ export interface SapItem {
   ShipToParty?: string;
   ShipToFullName?: string;
   StorageLocation?: string;
+  DeliveryDocumentItemText?: string;
   [key: string]: any;
 }
 
@@ -81,7 +82,7 @@ export async function fetchSapDataByVbeln(
       }
 
       const filterQuery = `Vbeln eq '${safeValue}' and LoadingDate eq datetime'${cleanDate}T00:00:00'`;
-      const url = `${baseUrl}?$format=json&$filter=${encodeURIComponent(filterQuery)}&$select=ReferenceSDDocument,Vbeln,DistributionChannel,ActualDeliveryQuantity,DeliveryQuantityUnit,RegionName,Material,ReferenceSDDocumentItem,Batch,ShipToFullName,ShipToParty,StorageLocation`;
+      const url = `${baseUrl}?$format=json&$filter=${encodeURIComponent(filterQuery)}&$select=ReferenceSDDocument,Vbeln,DistributionChannel,ActualDeliveryQuantity,DeliveryQuantityUnit,RegionName,Material,ReferenceSDDocumentItem,Batch,ShipToFullName,ShipToParty,StorageLocation,DeliveryDocumentItemText`;
 
       const reqStart = Date.now();
       try {

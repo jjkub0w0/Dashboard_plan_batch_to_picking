@@ -170,8 +170,31 @@ export class CalculationService {
             }
           }
 
+          // เคสพิเศษ: มี plan batch > 1 และมี plan batch == null อย่างน้อย 1 ตัว
+          // โดย batch ที่ดึงมาจาก fiori ตรงกับตัวอื่นในนั้นจนครบ และ qty ของแต่ละ batch ไม่น้อยกว่าที่ First batch กำหนด
+          const hasNoPlanInFb = fbList.some((fb: any) => {
+            const b = String(fb?.Batch || '').trim();
+            return !b || b === '-' || b.includes(NO_PLAN_BATCH_LEGACY);
+          });
+          const planTotalQty = fbList.reduce((sum: number, fb: any) => sum + (Number(fb?.QTY) || 0), 0);
+          const actualTotalQty = grp.reduce((sum: number, it: any) => sum + (Number(it.qty) || 0), 0);
+          const isTotalQtyMatch = planTotalQty > 0 ? planTotalQty === actualTotalQty : true;
+
+          let isSpecialNoPlanQtyMatch = false;
+          if (hasNoPlanInFb && fbList.length > 1 && plannedBatches.length > 0 && isTotalQtyMatch) {
+            isSpecialNoPlanQtyMatch = plannedBatches.every(b => {
+              const planQty = fbList
+                .filter((fb: any) => String(fb?.Batch || '').trim() === b)
+                .reduce((sum: number, fb: any) => sum + (Number(fb.QTY) || 0), 0);
+              const sapQty = grp
+                .filter(it => String(it.sapBatch || it.vrfyBatch || '').trim() === b)
+                .reduce((sum: number, it: any) => sum + (Number(it.qty) || 0), 0);
+              return sapQty >= planQty;
+            });
+          }
+
           for (const it of grp) {
-            if (isAllQtyMatch) {
+            if (isAllQtyMatch || isSpecialNoPlanQtyMatch) {
               it.match = true;
               it.batchStatus = 'MATCH';
             } else {
@@ -230,11 +253,13 @@ export class CalculationService {
     }
 
     let soCount = 0;
+    let postoCount = 0;
     const orders: OrderSummary[] = [];
 
     orderGroups.forEach((grp, key) => {
       const [route, otype, onum] = key.split('|');
       if (otype === 'SO') soCount++;
+      if (otype === 'POSTO') postoCount++;
 
       const uniqueDOs = Array.from(new Set(grp.map(x => x.do).filter(Boolean))).sort().join(', ');
       const customer = grp.find(x => Boolean(x.customer))?.customer || '';
@@ -472,9 +497,6 @@ export class CalculationService {
           customer: item.customer,
           material: item.itemCode,
           skuDescription: item.stdDesc,
-          shipToParty: item.shipToParty,
-          shipToFullName: item.shipToFullName,
-          storageLocation: item.storageLocation,
           firstBatch: (item.firstBatch && item.firstBatch.length > 0) ? item.firstBatch : (isAllNoPlan ? [{ Batch: NO_PLAN_BATCH, QTY: item.qty }] : []),
           firstBatchStr: fbStr,
           batchPlan: isAllNoPlan ? NO_PLAN_BATCH : item.batchPlan,
@@ -484,6 +506,9 @@ export class CalculationService {
           match: item.match,
           batchStatus: item.batchStatus || (isAllNoPlan ? (item.match ? 'MATCH' : 'QTY_MISMATCH') : (!item.vrfyBatch && !item.sapBatch ? 'PENDING' : (item.match ? 'MATCH' : 'MISMATCH'))),
           status: item.batchStatus === 'PENDING' ? 'PLANNED' : (item.batchStatus === 'MATCH' ? 'COMPLETED' : 'IN_PROGRESS'),
+          shipToFullName: item.shipToFullName || '',
+          shipToParty: item.shipToParty || '',
+          storageLocation: item.storageLocation || '',
         };
       });
 
@@ -520,6 +545,9 @@ export class CalculationService {
         status,
         qtyByUnit: bQtyByUnit,
         batchDetails,
+        shipToFullName: grp.find(it => it.shipToFullName)?.shipToFullName || '',
+        shipToParty: grp.find(it => it.shipToParty)?.shipToParty || '',
+        storageLocation: grp.find(it => it.storageLocation)?.storageLocation || '',
       });
     });
 
