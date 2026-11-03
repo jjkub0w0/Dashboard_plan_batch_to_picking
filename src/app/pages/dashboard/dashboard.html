@@ -609,17 +609,94 @@
              [class.col-show-status]="mobileCols().status">
         <thead>
           <tr>
-            <th class="col-so">เลขที่ SO</th>
-            <th class="col-do">เลขที่ DO</th>
-            <th class="col-trip">Trip</th>
-            <th class="col-type">ประเภท</th>
-            <th class="col-sku text-right">SKU</th>
-            <th class="col-qty text-right">จำนวนรวม</th>
-            <th class="col-match text-right">ตรงตามแนะนำ</th>
-            <th class="col-qty-mismatch text-right">ตรงตามแนะนำแต่จำนวนไม่ตรง</th>
-            <th class="col-mismatch text-right">เปลี่ยนล็อต</th>
-            <th class="col-rate text-center">สัดส่วน (%)</th>
-            <th class="col-status text-center">สถานะ</th>
+            <th class="col-so sortable" (click)="toggleSort('so')" [class.sorted]="sortColumn() === 'so'" title="คลิกเพื่อจัดเรียงตามเลขที่ SO">
+              <div class="th-content">
+                <span>เลขที่ SO</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'so'">
+                  {{ sortColumn() === 'so' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-do sortable" (click)="toggleSort('do')" [class.sorted]="sortColumn() === 'do'" title="คลิกเพื่อจัดเรียงตามเลขที่ DO">
+              <div class="th-content">
+                <span>เลขที่ DO</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'do'">
+                  {{ sortColumn() === 'do' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-trip sortable" (click)="toggleSort('trip')" [class.sorted]="sortColumn() === 'trip'" title="คลิกเพื่อจัดเรียงตาม Trip">
+              <div class="th-content">
+                <span>Trip</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'trip'">
+                  {{ sortColumn() === 'trip' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-type sortable text-center" (click)="toggleSort('type')" [class.sorted]="sortColumn() === 'type'" title="คลิกเพื่อจัดเรียงตามประเภท">
+              <div class="th-content justify-center">
+                <span>ประเภท</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'type'">
+                  {{ sortColumn() === 'type' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-sku text-right sortable" (click)="toggleSort('sku')" [class.sorted]="sortColumn() === 'sku'" title="คลิกเพื่อจัดเรียงตามจำนวน SKU">
+              <div class="th-content justify-end">
+                <span>SKU</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'sku'">
+                  {{ sortColumn() === 'sku' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-qty text-right sortable" (click)="toggleSort('qty')" [class.sorted]="sortColumn() === 'qty'" title="คลิกเพื่อจัดเรียงตามจำนวนรวม">
+              <div class="th-content justify-end">
+                <span>จำนวนรวม</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'qty'">
+                  {{ sortColumn() === 'qty' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-match text-right sortable" (click)="toggleSort('match')" [class.sorted]="sortColumn() === 'match'" title="คลิกเพื่อจัดเรียงตามยอดตรงตามแนะนำ">
+              <div class="th-content justify-end">
+                <span>ตรงตามแนะนำ</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'match'">
+                  {{ sortColumn() === 'match' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-qty-mismatch text-right sortable" (click)="toggleSort('qtyMismatch')" [class.sorted]="sortColumn() === 'qtyMismatch'" title="คลิกเพื่อจัดเรียงตามยอดตรงแต่จำนวนไม่ตรง">
+              <div class="th-content justify-end">
+                <span>ตรงตามแนะนำแต่จำนวนไม่ตรง</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'qtyMismatch'">
+                  {{ sortColumn() === 'qtyMismatch' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-mismatch text-right sortable" (click)="toggleSort('mismatch')" [class.sorted]="sortColumn() === 'mismatch'" title="คลิกเพื่อจัดเรียงตามยอดเปลี่ยนล็อต">
+              <div class="th-content justify-end">
+                <span>เปลี่ยนล็อต</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'mismatch'">
+                  {{ sortColumn() === 'mismatch' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-rate text-center sortable" (click)="toggleSort('rate')" [class.sorted]="sortColumn() === 'rate'" title="คลิกเพื่อจัดเรียงตามสัดส่วน %">
+              <div class="th-content justify-center">
+                <span>สัดส่วน (%)</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'rate'">
+                  {{ sortColumn() === 'rate' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
+            <th class="col-status text-center sortable" (click)="toggleSort('status')" [class.sorted]="sortColumn() === 'status'" title="คลิกเพื่อจัดเรียงตามสถานะ">
+              <div class="th-content justify-center">
+                <span>สถานะ</span>
+                <span class="sort-icon" [class.active]="sortColumn() === 'status'">
+                  {{ sortColumn() === 'status' ? (sortDirection() === 'asc' ? '▲' : '▼') : '⇅' }}
+                </span>
+              </div>
+            </th>
             <th class="col-action text-center"></th>
           </tr>
         </thead>

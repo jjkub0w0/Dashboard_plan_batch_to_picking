@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { DateFilterService } from '../../services/date-filter.service';
 import { getApiUrl } from '../../config/api.config';
 
+export type DashboardSortColumn = 'so' | 'do' | 'trip' | 'type' | 'sku' | 'qty' | 'match' | 'qtyMismatch' | 'mismatch' | 'rate' | 'status';
+export type SortDirection = 'asc' | 'desc' | 'default';
+
 export interface BatchSummaryItem {
   batchCode: string;
   soNumber?: string;
@@ -153,11 +156,118 @@ export class DashboardComponent {
     }
   }
 
+  // การจัดเรียงข้อมูลตาราง (Column Sorting)
+  readonly sortColumn = signal<DashboardSortColumn | null>(null);
+  readonly sortDirection = signal<SortDirection>('default');
+
+  toggleSort(col: DashboardSortColumn): void {
+    if (this.sortColumn() !== col) {
+      this.sortColumn.set(col);
+      this.sortDirection.set('asc');
+    } else {
+      const current = this.sortDirection();
+      if (current === 'asc') {
+        this.sortDirection.set('desc');
+      } else if (current === 'desc') {
+        this.sortDirection.set('default');
+        this.sortColumn.set(null);
+      } else {
+        this.sortDirection.set('asc');
+      }
+    }
+  }
+
   readonly filteredBatches = computed(() => {
-    const list = this.batchesList();
+    let list = [...this.batchesList()];
     const tab = this.selectedTab();
-    if (tab === 'ALL') return list;
-    return list.filter(b => b.orderType === tab);
+    if (tab !== 'ALL') {
+      list = list.filter(b => b.orderType === tab);
+    }
+
+    const col = this.sortColumn();
+    const dir = this.sortDirection();
+
+    if (!col || dir === 'default') {
+      // Default Sort: SO first, then POSTO; same SO together, then by route
+      return list.sort((a, b) => {
+        if (a.orderType !== b.orderType) {
+          return a.orderType === 'SO' ? -1 : 1;
+        }
+        const soA = a.soNumber || a.batchCode || '';
+        const soB = b.soNumber || b.batchCode || '';
+        if (soA !== soB) {
+          return soA.localeCompare(soB, undefined, { numeric: true });
+        }
+        return (a.route || '').localeCompare(b.route || '', undefined, { numeric: true });
+      });
+    }
+
+    const multiplier = dir === 'asc' ? 1 : -1;
+
+    return list.sort((a, b) => {
+      let cmp = 0;
+      switch (col) {
+        case 'so': {
+          const valA = a.soNumber || a.batchCode || '';
+          const valB = b.soNumber || b.batchCode || '';
+          cmp = valA.localeCompare(valB, undefined, { numeric: true });
+          break;
+        }
+        case 'do': {
+          const valA = a.doNumber || '';
+          const valB = b.doNumber || '';
+          cmp = valA.localeCompare(valB, undefined, { numeric: true });
+          break;
+        }
+        case 'trip': {
+          const valA = a.route || '';
+          const valB = b.route || '';
+          cmp = valA.localeCompare(valB, undefined, { numeric: true });
+          break;
+        }
+        case 'type': {
+          cmp = (a.orderType || '').localeCompare(b.orderType || '');
+          break;
+        }
+        case 'sku': {
+          cmp = (a.skusCount || 0) - (b.skusCount || 0);
+          break;
+        }
+        case 'qty': {
+          cmp = (a.totalQty || 0) - (b.totalQty || 0);
+          break;
+        }
+        case 'match': {
+          cmp = (a.matchedQty || 0) - (b.matchedQty || 0);
+          break;
+        }
+        case 'qtyMismatch': {
+          cmp = (a.qtyMismatchedQty || 0) - (b.qtyMismatchedQty || 0);
+          break;
+        }
+        case 'mismatch': {
+          cmp = (a.mismatchedQty || 0) - (b.mismatchedQty || 0);
+          break;
+        }
+        case 'rate': {
+          cmp = (a.matchRate || 0) - (b.matchRate || 0);
+          break;
+        }
+        case 'status': {
+          const statusOrder: Record<string, number> = { COMPLETED: 1, IN_PROGRESS: 2, PLANNED: 3 };
+          cmp = (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+          break;
+        }
+      }
+
+      if (cmp !== 0) {
+        return cmp * multiplier;
+      }
+
+      const soA = a.soNumber || a.batchCode || '';
+      const soB = b.soNumber || b.batchCode || '';
+      return soA.localeCompare(soB, undefined, { numeric: true });
+    });
   });
 
   /**

@@ -555,8 +555,21 @@ export class CalculationService {
       });
     });
 
-    // Sort batches by totalQty DESC
-    batches.sort((a, b) => b.totalQty - a.totalQty);
+    // Default sorting: SO first, then POSTO; within same type, group same SO together, then by route
+    batches.sort((a, b) => {
+      // 1. Order type: SO first, POSTO second
+      if (a.orderType !== b.orderType) {
+        return a.orderType === 'SO' ? -1 : 1;
+      }
+      // 2. Same SO together
+      const soA = a.soNumber || a.batchCode || '';
+      const soB = b.soNumber || b.batchCode || '';
+      if (soA !== soB) {
+        return soA.localeCompare(soB, undefined, { numeric: true });
+      }
+      // 3. Within same SO, sort by route / Trip
+      return (a.route || '').localeCompare(b.route || '', undefined, { numeric: true });
+    });
 
     const allBatchDetails: SoBatchDetailItem[] = batches.flatMap(b => b.batchDetails || []);
 
