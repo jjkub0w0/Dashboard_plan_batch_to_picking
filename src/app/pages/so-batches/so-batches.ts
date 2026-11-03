@@ -425,7 +425,7 @@ export class SoBatchesComponent implements OnInit {
   // Unique SO list for dropdown
   readonly uniqueSoList = computed(() => {
     const list = this.groupedSkuItems();
-    const map = new Map<string, { so: string; doCount: number; qty: number; matchedLines: number; totalLines: number; route: string; customer: string; dos: Set<string> }>();
+    const map = new Map<string, { so: string; doCount: number; qty: number; matchedLines: number; totalLines: number; routes: Set<string>; customer: string; dos: Set<string> }>();
 
     for (const item of list) {
       const so = item.so || 'UNKNOWN';
@@ -436,7 +436,7 @@ export class SoBatchesComponent implements OnInit {
           qty: 0,
           matchedLines: 0,
           totalLines: 0,
-          route: item.route,
+          routes: new Set<string>(),
           customer: item.customer,
           dos: new Set<string>(),
         });
@@ -445,6 +445,7 @@ export class SoBatchesComponent implements OnInit {
       entry.qty += item.qty;
       entry.totalLines += 1;
       if (item.status === 'MATCH') entry.matchedLines += 1;
+      if (item.route) entry.routes.add(item.route);
       entry.dos.add(item.do);
     }
 
@@ -452,7 +453,7 @@ export class SoBatchesComponent implements OnInit {
       so: e.so,
       doCount: e.dos.size,
       qty: e.qty,
-      route: e.route,
+      route: Array.from(e.routes).join(', ') || '-',
       customer: e.customer,
       matchRate: e.totalLines > 0 ? Math.round((e.matchedLines / e.totalLines) * 100) : 0,
     }));
@@ -647,10 +648,12 @@ export class SoBatchesComponent implements OnInit {
       const pendingLines = dos.reduce((sum, d) => sum + d.pendingLines, 0);
       const matchRate = totalLines > 0 ? Math.round((matchedLines / totalLines) * 100) : 0;
 
+      const allRoutes = Array.from(new Set(dos.map(d => d.route).filter(Boolean))).join(', ');
+
       return {
         soNumber: so.soNumber,
         orderType: so.orderType,
-        route: so.route,
+        route: allRoutes || so.route,
         customer: so.customer,
         dos,
         totalDos: dos.length,

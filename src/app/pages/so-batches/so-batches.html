@@ -333,6 +333,9 @@
                   <div class="do-title-info">
                     <span class="do-prefix">เลขที่ DO:</span>
                     <strong class="do-num-val">{{ doGroup.doNumber }}</strong>
+                    @if (doGroup.route) {
+                      <span class="so-route-tag" style="margin-left: 6px; font-size: 11px;">{{ doGroup.route }}</span>
+                    }
                     @if (doGroup.customer) {
                       <span class="do-cust-hint">{{ doGroup.customer }}</span>
                     }

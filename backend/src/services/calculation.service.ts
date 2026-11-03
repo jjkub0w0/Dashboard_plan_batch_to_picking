@@ -400,17 +400,21 @@ export class CalculationService {
     const mismatchedPct = totalLines > 0 ? Math.round((mismatchedLines / totalLines) * 1000) / 10 : 0;
     const pendingPct = totalLines > 0 ? Math.round((pendingLines / totalLines) * 1000) / 10 : 0;
 
-    // 4. SO Level Aggregations (Grouped by SO / Sales Order แทน Trip Number)
+    // 4. SO Level Aggregations (Grouped by SO / Sales Order และ Trip Number รองรับกรณีสปลิตคัน)
     const soGroups = new Map<string, RawPickingItem[]>();
     for (const r of rawItems) {
-      const soKey = r.orderNum || r.do || 'UNKNOWN';
-      if (!soGroups.has(soKey)) soGroups.set(soKey, []);
-      soGroups.get(soKey)!.push(r);
+      const soNum = r.orderNum || r.do || 'UNKNOWN';
+      const routeStr = (r.route || '').trim();
+      // จัดกลุ่มด้วย SO + Trip เพื่อแยกแถวเมื่อมีสปลิตคัน (Split Trip) แต่หาก Trip เดียวกันจะรวมเป็นแถวเดียวกัน
+      const groupKey = routeStr ? `${soNum}|${routeStr}` : soNum;
+      if (!soGroups.has(groupKey)) soGroups.set(groupKey, []);
+      soGroups.get(groupKey)!.push(r);
     }
 
     const batches: BatchSummary[] = [];
 
-    soGroups.forEach((grp, soNum) => {
+    soGroups.forEach((grp, groupKey) => {
+      const soNum = groupKey.includes('|') ? groupKey.split('|')[0] : groupKey;
       const oType = (grp.some(x => x.orderType === 'POSTO') || soNum.startsWith('42')) ? 'POSTO' : 'SO';
       const uniqueDos = Array.from(new Set(grp.map(x => x.do).filter(Boolean)));
       const doStr = uniqueDos.join(', ');
@@ -513,7 +517,7 @@ export class CalculationService {
       });
 
       batches.push({
-        batchCode: soNum,
+        batchCode: groupKey,
         soNumber: soNum,
         doNumber: doStr,
         route,
